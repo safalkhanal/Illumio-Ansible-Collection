@@ -15,7 +15,7 @@ pip install aiohttp
 This collections is packaged under ansible-galaxy, so to install it you need to run following command:
 
 ```ansible
-ansible-galaxy collection install respiro-illumio-1.0.3.tar.gz
+ansible-galaxy collection install respiro.illumio
 ```
 
 ## Features
@@ -64,7 +64,7 @@ name: Display label info
 hosts: localhost
 tasks:
  - name: Display the list of label
-   respiro.illumio.create_umw:
+   respiro.illumio.display_label_info:
       user: "api_12321323cf4545"
       password: "097jhdjksb9387384hjd3384bnfj93"
       pce: "https://poc1.illum.io"
@@ -101,7 +101,7 @@ name: Add unmanaged workload
 hosts: localhost
 tasks:
  - name: Add workload to PCE
-   respiro.illumio.create_label:
+   respiro.illumio.create_umw:
      user: "api_12321323cf4545"
      password: "097jhdjksb9387384hjd3384bnfj93"
      pce: "https://poc1.illum.io"

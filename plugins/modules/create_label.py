@@ -8,7 +8,7 @@ module: respiro.illumio.create_labels
 
 short_description: This module adds labels to PCE
 
-version_added: "1.0.3"
+version_added: "1.0.5"
 
 description: This module contains two approaches to add labels to PCE. One is to pass argument as name and type of label
 and the other approach is to pass the path of csv file containing the list of new labels.
@@ -51,34 +51,34 @@ EXAMPLES = r'''
 # Pass in a path
 - name: Test the module with csv path
   respiro.illumio.create_label:
-    user: "api_12321323cf4545"
-    password: "097jhdjksb9387384hjd3384bnfj93"
-    pce: "https://poc1.illum.io"
-    org_href: "orgs/80"
+    user: testuser
+    password: testpass
+    pce: pce_url
+    org_href: org_href
     path: "labels.csv"
 
 # pass in single label information
 - name: Test with a single label information
   respiro.illumio.create_label:
-    user: "api_12321323cf4545"
-    password: "097jhdjksb9387384hjd3384bnfj93"
-    pce: "https://poc1.illum.io"
-    org_href: "orgs/80"
+    user: "testuser"
+    password: "testpass"
+    pce: "pce_url"
+    org_href: "org_href"
     name: "test_application"
     type: "app"
-    
 # fail the module
 - name: Test failure of the module
   respiro.illumio.create_label:
-    user: "api_12321323cf4545"
-    password: "097jhdjksb9387384hjd3384bnfj93"
-    pce: "https://poc1.illum.io"
-    org_href: "orgs/80"
+    user: "testuser"
+    password: "testpass"
+    pce: "pce_url"
+    org_href: "org_href"
     name: "test_application"
     type: "ap"
 '''
 
 RETURN = r'''
+# These are examples of possible return values, and in general should use other names for return values.
 error:
     description: List of label that module was not able to add to PCE.
     type: list
@@ -147,8 +147,8 @@ def run_module():
         elif l_type and l_name:
             if l_type == 'env' or l_type == 'loc' or l_type == 'app' or l_type == 'role':
                 y = {"key": l_type, "value": l_name}
-                list["success"].append(key + " : " + value)
-                response = requests.post(API, auth=HTTPBasicAuth(login, password), data=json.dumps(y))
+                list["success"].append(l_type + " : " + l_name)
+                response = requests.post(API, auth=HTTPBasicAuth(login, password), data=json.dumps({"key": l_type, "value": l_name}))
             else:
                 module.exit_json(msg="Invalid type value.", failed=l_type)
         else:

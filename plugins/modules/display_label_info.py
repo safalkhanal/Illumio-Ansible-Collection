@@ -6,7 +6,7 @@ DOCUMENTATION = r'''
 ---
 module: respiro.illumio.display_label_info
 
-version_added: "1.0.3"
+version_added: "1.0.5"
 
 short_description: This is the module to display Illumio labels
 
