@@ -4,13 +4,11 @@ __metaclass__ = type
 
 DOCUMENTATION = r'''
 ---
-module: create_umw
+module: respiro.illumio.create_umw
 
 short_description: This is the module to create unmanaged workloads in PCE
 
-# If this is part of a collection, you need to use semantic versioning,
-# i.e. the version is of the form "2.5.0" and not "2.4".
-version_added: "1.0.0"
+version_added: "1.0.3"
 
 description: Use this module to add unmanaged workloads to PCE. pass the path to csv file containing workload information and assiciated label along with credentials to
 PCE to add unmanaged workloads to PCE
@@ -36,10 +34,6 @@ options:
         description: This takes the path to csv file contatining workload information
         required: true
         type: str
-# Specify this value according to your collection
-# in format of namespace.collection.doc_fragment_name
-extends_documentation_fragment:
-    - my_namespace.my_collection.my_doc_fragment_name
 
 author:
     - Safal Khanal (@Safalkhanal)
@@ -49,15 +43,15 @@ EXAMPLES = r'''
 # Pass in a message
 - name: Test with a path to csv file
   respiro.illumio.create_umw:
-    user: "{{user}}"
-    password: "{{password}}"
-    pce: "{{pce}}"
-    org_href: "{{org_href}}"
+    user: "api_12321323cf4545"
+    password: "097jhdjksb9387384hjd3384bnfj93"
+    pce: "https://poc1.illum.io"
+    org_href: "orgs/80"
     workload: "workload.csv"
 '''
 
 RETURN = r'''
-# These are examples of possible return values, and in general should use other names for return values.
+# This is an examples of possible return value.
 description: json list of labels
 type: json
 returned: always

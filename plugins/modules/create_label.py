@@ -8,9 +8,7 @@ module: respiro.illumio.create_labels
 
 short_description: This module adds labels to PCE
 
-# If this is part of a collection, you need to use semantic versioning,
-# i.e. the version is of the form "2.5.0" and not "2.4".
-version_added: "1.0.0"
+version_added: "1.0.3"
 
 description: This module contains two approaches to add labels to PCE. One is to pass argument as name and type of label
 and the other approach is to pass the path of csv file containing the list of new labels.
@@ -45,11 +43,6 @@ options:
         required: true
         type: str
 
-# Specify this value according to your collection
-# in format of namespace.collection.doc_fragment_name
-extends_documentation_fragment:
-    - respiro.illumio.create_label
-
 author:
     - Safal Khanal (@safalkhanal)
 '''
@@ -58,34 +51,34 @@ EXAMPLES = r'''
 # Pass in a path
 - name: Test the module with csv path
   respiro.illumio.create_label:
-    user: testuser
-    password: testpass
-    pce: pce_url
-    org_href: org_href
+    user: "api_12321323cf4545"
+    password: "097jhdjksb9387384hjd3384bnfj93"
+    pce: "https://poc1.illum.io"
+    org_href: "orgs/80"
     path: "labels.csv"
 
 # pass in single label information
 - name: Test with a single label information
   respiro.illumio.create_label:
-    user: "testuser"
-    password: "testpass"
-    pce: "pce_url"
-    org_href: "org_href"
+    user: "api_12321323cf4545"
+    password: "097jhdjksb9387384hjd3384bnfj93"
+    pce: "https://poc1.illum.io"
+    org_href: "orgs/80"
     name: "test_application"
     type: "app"
+    
 # fail the module
 - name: Test failure of the module
   respiro.illumio.create_label:
-    user: "testuser"
-    password: "testpass"
-    pce: "pce_url"
-    org_href: "org_href"
+    user: "api_12321323cf4545"
+    password: "097jhdjksb9387384hjd3384bnfj93"
+    pce: "https://poc1.illum.io"
+    org_href: "orgs/80"
     name: "test_application"
     type: "ap"
 '''
 
 RETURN = r'''
-# These are examples of possible return values, and in general should use other names for return values.
 error:
     description: List of label that module was not able to add to PCE.
     type: list

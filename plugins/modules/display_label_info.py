@@ -4,7 +4,9 @@ __metaclass__ = type
 
 DOCUMENTATION = r'''
 ---
-module: display_label_info
+module: respiro.illumio.display_label_info
+
+version_added: "1.0.3"
 
 short_description: This is the module to display Illumio labels
 
@@ -35,11 +37,6 @@ options:
         required: true
         type: str
 
-# Specify this value according to your collection
-# in format of namespace.collection.doc_fragment_name
-extends_documentation_fragment:
-    - my_namespace.my_collection.my_doc_fragment_name
-
 author:
     - Safal Khanal (@safalkhanal99)
 '''
@@ -49,14 +46,14 @@ EXAMPLES = r'''
     - name: display all labels in PCE
       respiro.illumio.display_label_info:
         type: "all"
-        user: "{{login}}"
-        password: "{{password}}"
-        pce: "{{pce}}"
-        org_href: "{{org_href}}"
+        user: "api_12321323cf4545"
+        password: "097jhdjksb9387384hjd3384bnfj93"
+        pce: "https://poc1.illum.io"
+        org_href: "orgs/80"
 '''
 
 RETURN = r'''
-# These are examples of possible return values, and in general should use other names for return values.
+# This is an examples of possible return value.
 
 description: json list of labels
 type: json
@@ -72,7 +69,7 @@ sample:
                 "created_by": {
                     "href": "/users/45"
                 },
-                "href": "/orgs/5/labels/57",
+                "href": "/orgs/80/labels/57",
                 "key": "loc",
                 "updated_at": "2018-09-06T06:52:49.817Z",
                 "updated_by": {
