@@ -154,7 +154,8 @@ def run_module():
         elif l_type and l_name:
             if l_type == 'env' or l_type == 'loc' or l_type == 'app' or l_type == 'role':
                 y = {"key": l_type, "value": l_name}
-                response = requests.post(API, auth=HTTPBasicAuth(login, password), data=y)
+                list["success"].append(key + " : " + value)
+                response = requests.post(API, auth=HTTPBasicAuth(login, password), data=json.dumps(y))
             else:
                 module.exit_json(msg="Invalid type value.", failed=l_type)
         else:
