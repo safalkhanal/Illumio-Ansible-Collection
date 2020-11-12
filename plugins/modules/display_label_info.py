@@ -6,7 +6,7 @@ DOCUMENTATION = r'''
 ---
 module: respiro.illumio.display_label_info
 
-version_added: "1.0.5"
+version_added: "1.0.6"
 
 short_description: This is the module to display Illumio labels
 
@@ -111,7 +111,7 @@ def run_module():
         argument_spec=module_args,
         supports_check_mode=True
     )
-    API = module.params["pce"] + "/api/v1/" + module.params["org_href"] + "/labels"
+    API = module.params["pce"] + "/api/v2/" + module.params["org_href"] + "/labels"
     if module.check_mode:
         module.exit_json(**result)
     checksum = 0

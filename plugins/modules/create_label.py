@@ -8,7 +8,7 @@ module: respiro.illumio.create_labels
 
 short_description: This module adds labels to PCE
 
-version_added: "1.0.5"
+version_added: "1.0.6"
 
 description: This module contains two approaches to add labels to PCE. One is to pass argument as name and type of label
 and the other approach is to pass the path of csv file containing the list of new labels.
@@ -127,7 +127,7 @@ def run_module():
     password = module.params["password"]
     org_href = module.params["org_href"]
     pce = module.params["pce"]
-    API = pce + "/api/v1/" + org_href + "/labels"
+    API = pce + "/api/v2/" + org_href + "/labels"
 
     if module.check_mode:
         module.exit_json(**result)
