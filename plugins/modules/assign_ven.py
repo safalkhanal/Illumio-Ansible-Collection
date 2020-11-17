@@ -8,7 +8,7 @@ module: respiro.illumio.assign_ven
 
 short_description: This is the module to assign VEN to a workloads
 
-version_added: "1.0.0"
+version_added: "1.0.1"
 
 description: This module lets user to add managed workload to PCE. First the csv file containing workload information is
 read and script is run in the machine to install ven. Then the managed workload is matched with the machines from csv

@@ -34,7 +34,7 @@ ansible-galaxy collection install respiro.illumio
 * ``` create_label  ```: This module adds labels to PCE. User can add single label information by supplying the type and name of the label or add multiple labels by giving the path to the CSV file.
 * ``` display_label_info  ```: This module retrieves label information from PCE
 * ``` create_umw  ```: Adds the unmanaged workloads from the CSV file to PCE and assigned labels from the same CSV file
-* ``` assign_ven  ```: This module deploys VEN to workloads from CSV file
+* ``` assign_ven  ```: This module deploys VEN to workloads from CSV file. Note: This module deploys VEN for linux machines only. There will be future updates to deploy VEN to other machines.
 * ``` assign_managed_labels  ```: This module assigns labels to managed workloads.
 
 ## CSV file format

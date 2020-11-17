@@ -8,7 +8,7 @@ module: respiro.illumio.create_umw
 
 short_description: This is the module to create unmanaged workloads in PCE
 
-version_added: "1.0.7"
+version_added: "1.0.8"
 
 description: Use this module to add unmanaged workloads to PCE. pass the path to csv file containing workload information and assiciated label along with credentials to
 PCE to add unmanaged workloads to PCE

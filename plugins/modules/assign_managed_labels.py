@@ -8,7 +8,7 @@ module: respiro.illumio.assign_managed_labels
 
 short_description: This is the module to assign labels to managed workloads from the csv file.
 
-version_added: "1.0.0"
+version_added: "1.0.1"
 
 description: This module assigns labels to managed workloads. First the csv file is read and workloads from
 csv file is compared to managed workloads in PCE and labels are assigned to those workloads.
