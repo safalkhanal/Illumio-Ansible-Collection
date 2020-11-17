@@ -8,7 +8,7 @@ module: respiro.illumio.create_labels
 
 short_description: This module adds labels to PCE
 
-version_added: "1.0.6"
+version_added: "1.0.7"
 
 description: This module contains two approaches to add labels to PCE. One is to pass argument as name and type of label
 and the other approach is to pass the path of csv file containing the list of new labels.

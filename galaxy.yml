@@ -8,7 +8,7 @@ namespace: respiro
 name: illumio
 
 # The version of the collection. Must be compatible with semantic versioning
-version: 1.0.6
+version: 1.0.7
 
 # The path to the Markdown (.md) readme file. This path is relative to the root of the collection
 readme: README.md
@@ -21,7 +21,7 @@ authors:
 
 ### OPTIONAL but strongly recommended
 # A short summary description of the collection
-description: This is a collection of modules to manage illumio PCE. This is the first version and more modules will be added in the future.
+description: This is a collection of modules to manage illumio PCE. This is the initial version and more modules will be added in the future.
 
 # Either a single license or a list of licenses for content inside of a collection. Ansible Galaxy currently only
 # accepts L(SPDX,https://spdx.org/licenses/) licenses. This key is mutually exclusive with 'license_file'
