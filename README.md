@@ -28,6 +28,7 @@ ansible-galaxy collection install respiro.illumio
 * Add single label data to Illumio PCE
 * Add multiple label data using csv file
 * Get the list of labels from PCE
+* Update the name (value) of existing label
 
 ## Modules
 
@@ -36,6 +37,7 @@ ansible-galaxy collection install respiro.illumio
 * ``` create_umw  ```: Adds the unmanaged workloads from the CSV file to PCE and assigned labels from the same CSV file
 * ``` assign_ven  ```: This module deploys VEN to workloads from CSV file. Note: This module deploys VEN for linux machines only. There will be future updates to deploy VEN to other machines.
 * ``` assign_managed_labels  ```: This module assigns labels to managed workloads.
+* ``` update_label ```: This module updates existing label's name
 
 ## CSV file format
 
@@ -204,6 +206,27 @@ Here are some of the example of using the modules
     - name: output data
       debug:
         msg: '{{ data }}'
+```
+* Update existing label's name
+
+```yaml
+---
+- name: Update a label
+  hosts: localhost
+  tasks:
+  - name: update label
+    respiro.illumio.update_label:
+      pce: "poc1.illum.io"
+      port: "8443"
+      org_id: "80"
+      label_id: "439151"
+      username: "api_15df8c15v1d8"
+      auth_secret: "54gf845v48rwe8wc548v8hr85d9abbe86a6555f8v8w8m85yh8yyy8h"
+      new_value: "testing_0"
+    register: test_output
+  - name: dump test output
+    debug:
+      msg: '{{ test_output }}'
 ```
 
 

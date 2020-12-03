@@ -10,7 +10,7 @@ module: respiro.illumio.update_label
 
 short_description: This module can update existing label's name on PCE
 
-version_added: "1.0.8"
+version_added: "1.1.0"
 
 description: When executed, the module will use the provided label ID to try to retrieve the
 current label's name. If successful, it will try to update the label's name to the new value 
