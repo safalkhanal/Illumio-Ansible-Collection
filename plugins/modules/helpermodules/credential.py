@@ -12,7 +12,8 @@ class Credential(object):
         self.port = port
 
     # For API call without org_href
-    # "rest" mean the rest of the API call (or URI)
+    # "rest" mean the rest of the API call
+    # e.g. /labels, /pairing_profiles,... depend on the task
     def url_with_api(self, rest):
         # remove "/" from user input to avoid "//example"
         if rest[0] == "/":
@@ -21,6 +22,7 @@ class Credential(object):
 
     # For API call with org_href
     # "rest" mean the rest of the API call (or URI)
+    # e.g. /labels, /pairing_profiles,... depend on the task
     def url_with_org(self, rest):
         # remove "/" from user input to avoid "//example"
         if rest[0] == "/":
