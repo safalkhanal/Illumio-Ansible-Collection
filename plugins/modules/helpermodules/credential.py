@@ -1,5 +1,20 @@
 #!/usr/bin/env python3
 
+"""
+Declaring Credential object:
+- Store login information: username, authentication secret
+- PCE, port, org_href
+"""
+
+__author__ = "Nghia Huu (David) Nguyen"
+__copyright__ = "Copyright 2020"
+__credits__ = ["David Nguyen"]
+__license__ = "GPL"
+__version__ = "1.0.0"
+__maintainer__ = "David Nguyen"
+__email__ = "davidnguyen0207@gmail.com"
+__status__ = "In Development"
+
 class Credential(object):
 
     # Initialise Credential
