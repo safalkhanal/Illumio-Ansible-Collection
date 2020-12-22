@@ -78,7 +78,6 @@ def async_api(creds, resource, has_org, payload=None):
     while status != "done" and status != "failed":
         response = sync_api(creds, "get", monitor_url, False)
         status = json.loads(response.content)['status']
-        print(status)
         time.sleep(1)
 
     # After the status on the second URL become "done"
