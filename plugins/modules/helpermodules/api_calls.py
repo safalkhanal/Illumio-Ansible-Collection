@@ -43,7 +43,7 @@ def sync_api(creds, http_verb, resource, has_org, payload=None):
     return response
 
 
-# Making an asynchronous API call
+# Making an asynchronous "GET" API call
 # For OVER 500 items being queried on the server ("GET" operation)
 # NOTE: only apply to "GET" HTTP operation and therefore doesn't require a http verb
 # Requires a credential, resource to access (e.g. /labels for labels),
@@ -68,6 +68,7 @@ def async_api(creds, resource, has_org, payload=None):
     # Since this is an asynchronous call so instead of the result,
     # The server will send back a special URL; We will perform GET operation on that URL
     # periodically until it's either success or fail
+
     # First we wait for suggested amount of time (provided by the server)
     time.sleep(int(response.headers['Retry-After']))
 
@@ -80,9 +81,9 @@ def async_api(creds, resource, has_org, payload=None):
         print(status)
         time.sleep(1)
 
-    # After the status one the second URL become "done"
+    # After the status on the second URL become "done"
     # The server will send us a third URL
-    # Doing GET operation on this URL yield results
+    # Use the HREF to get results of the request
     response = sync_api(creds, "get", json.loads(response.content)['result']['href'], False)
 
     return response
