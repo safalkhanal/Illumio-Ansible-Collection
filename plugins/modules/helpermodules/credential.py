@@ -15,6 +15,7 @@ __maintainer__ = "David Nguyen"
 __email__ = "davidnguyen0207@gmail.com"
 __status__ = "In Development"
 
+
 class Credential(object):
 
     # Initialise Credential
