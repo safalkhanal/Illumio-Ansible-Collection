@@ -14,19 +14,19 @@ description: Use this module to add unmanaged workloads to PCE. pass the path to
 PCE to add unmanaged workloads to PCE
 
 options:
-    user:
+    username:
         description: This takes the user key value to access Illumio API. Generate the API key from PCE and place the Authentication Username here.
         required: true
         type: str
-    password:
-        description: This takes the user passkey to access Illumio API. From API key, place the Secret value here
+    auth_secret:
+        description: This takes the api secret keyu to access Illumio API. From API key, place the Secret value here
         required: true
         type: str
     pce:
         description: This takes the url link to Illumio PCE
         required: true
         type: str
-    org-href:
+    org_id:
         description: This takes the organisation href for Illumio PCE
         required: true
         type: str
@@ -43,10 +43,10 @@ EXAMPLES = r'''
 # Pass in a message
 - name: Test with a path to csv file
   respiro.illumio.create_umw:
-    user: "api_12321323cf4545"
-    password: "097jhdjksb9387384hjd3384bnfj93"
+    username: "api_12321323cf4545"
+    auth_secret: "097jhdjksb9387384hjd3384bnfj93"
     pce: "https://poc1.illum.io"
-    org_href: "orgs/80"
+    org_id: "80"
     workload: "workload.csv"
 '''
 
@@ -76,10 +76,10 @@ from requests.auth import HTTPBasicAuth
 def run_module():
     module_args = dict(
         workload=dict(type='str', required=True),
-        user=dict(type='str', required=True),
-        password=dict(type='str', required=True),
+        username=dict(type='str', required=True),
+        auth_secret=dict(type='str', required=True),
         pce=dict(type='str', required=True),
-        org_href=dict(type='str', required=True),
+        org_id=dict(type='str', required=True),
     )
     result = dict()
     module = AnsibleModule(
@@ -87,16 +87,16 @@ def run_module():
         supports_check_mode=True
     )
     workload = module.params['workload']
-    login = module.params["user"]
-    password = module.params["password"]
-    org_href = module.params["org_href"]
+    login = module.params["username"]
+    auth_secret = module.params["auth_secret"]
+    org_id = module.params["org_id"]
     pce = module.params["pce"]
 
     class Creds(object):
 
-        def __init__(self, login, password, pce, org):
+        def __init__(self, login, auth_secret, pce, org):
             self.login = login
-            self.password = password
+            self.auth_secret = auth_secret
             self.pce = pce
             self.org = org
 
@@ -104,7 +104,7 @@ def run_module():
             return self.pce + "/api/v2/" + rest
 
         def url_with_org(self, rest):
-            return self.pce + "/api/v2/" + self.org + rest
+            return self.pce + "/api/v2/orgs/" + self.org + rest
 
     def sync_api(creds, type, resource, org, payload=None):
         if org:
@@ -112,9 +112,9 @@ def run_module():
         else:
             api = creds.url_with_api(resource)
         if type == "get":
-            return requests.get(api, auth=HTTPBasicAuth(creds.login, creds.password))
+            return requests.get(api, auth=HTTPBasicAuth(creds.login, creds.auth_secret))
         elif type == "post":
-            return requests.post(api, auth=HTTPBasicAuth(creds.login, creds.password), data=payload)
+            return requests.post(api, auth=HTTPBasicAuth(creds.login, creds.auth_secret), data=payload)
 
     async def async_api(creds, type, resource, org, payload=None):
         if org:
@@ -122,11 +122,11 @@ def run_module():
         else:
             api = creds.url_with_api(resource)
         if type == "get":
-            async with aiohttp.ClientSession(auth=aiohttp.BasicAuth(creds.login, creds.password)) as session:
+            async with aiohttp.ClientSession(auth=aiohttp.BasicAuth(creds.login, creds.auth_secret)) as session:
                 async with session.get(api) as resp:
                     response = await resp.read()
         elif type == "post":
-            async with aiohttp.ClientSession(auth=aiohttp.BasicAuth(creds.login, creds.password)) as session:
+            async with aiohttp.ClientSession(auth=aiohttp.BasicAuth(creds.login, creds.auth_secret)) as session:
                 async with session.post(api, data=payload) as resp:
                     response = await resp.json()
 
@@ -182,7 +182,7 @@ def run_module():
         }
         return sync_api(creds, "post", "/workloads", True, json.dumps(wl))
 
-    creds = Creds(login, password, pce, org_href)
+    creds = Creds(login, auth_secret, pce, org_id)
     labels_details = display_labels()
     with open(workload, 'r') as details:
         workload_details = csv.DictReader(details, delimiter=",")
@@ -194,28 +194,28 @@ def run_module():
             app = rows["app"]
             env = rows["env"]
             loc = rows["loc"]
-            if role is not None:
+            if role is not "":
                 if role in labels_details['role']:
                     role = labels_details['role'][role]
                 else:
                     href = create_label(creds, "role", role)[0]
                     labels_details['role'][role] = href
                     role = href
-            if app is not None:
+            if app is not "":
                 if app in labels_details['app']:
                     app = labels_details['app'][app]
                 else:
                     href = create_label(creds, "app", app)[0]
                     labels_details['app'][app] = href
                     app = href
-            if env is not None:
+            if env is not "":
                 if env in labels_details['env']:
                     env = labels_details['env'][env]
                 else:
                     href = create_label(creds, "env", env)[0]
                     labels_details['env'][env] = href
                     env = href
-            if loc is not None:
+            if loc is not "":
                 if loc in labels_details['loc']:
                     loc = labels_details['loc'][loc]
                 else:

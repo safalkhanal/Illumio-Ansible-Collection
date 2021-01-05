@@ -26,12 +26,12 @@ options:
         description: This takes the path of csv file containing the list of labels
         required: true
         type: str
-    user:
+    username:
         description: This takes the user key value to access Illumio API. Generate the API key from PCE and place the Authentication Username here.
         required: true
         type: str
-    password:
-        description: This takes the user passkey to access Illumio API. From API key, place the Secret value here
+    auth_secret:
+        description: This takes the API secret key to access Illumio API. From API key, place the Secret value here
         required: true
         type: str
     pce:
@@ -51,28 +51,29 @@ EXAMPLES = r'''
 # Pass in a path
 - name: Test the module with csv path
   respiro.illumio.create_label:
-    user: testuser
-    password: testpass
+    username: testuser
+    auth_secret: testpass
     pce: pce_url
-    org_href: org_href
+    org_id: 80
     path: "labels.csv"
 
 # pass in single label information
 - name: Test with a single label information
   respiro.illumio.create_label:
-    user: "testuser"
-    password: "testpass"
+    username: "testuser"
+    auth_secret: "testpass"
     pce: "pce_url"
-    org_href: "org_href"
+    org_id: "80"
     name: "test_application"
     type: "app"
+    
 # fail the module
 - name: Test failure of the module
   respiro.illumio.create_label:
-    user: "testuser"
-    password: "testpass"
+    username: "testuser"
+    auth_secret: "testpass"
     pce: "pce_url"
-    org_href: "org_href"
+    org_id: "80"
     name: "test_application"
     type: "ap"
 '''
@@ -110,10 +111,10 @@ def run_module():
         name=dict(type='str', required=False),
         type=dict(type='str', required=False),
         path=dict(type='str', required=False),
-        user=dict(type='str', required=True),
-        password=dict(type='str', required=True),
+        username=dict(type='str', required=True),
+        auth_secret=dict(type='str', required=True),
         pce=dict(type='str', required=True),
-        org_href=dict(type='str', required=True),
+        org_id=dict(type='str', required=True),
     )
     result = dict()
     module = AnsibleModule(
@@ -123,9 +124,9 @@ def run_module():
     l_name = module.params['name']
     l_type = module.params['type']
     l_path = module.params['path']
-    login = module.params["user"]
-    password = module.params["password"]
-    org_href = module.params["org_href"]
+    login = module.params["username"]
+    auth_secret = module.params["auth_secret"]
+    org_href = module.params["org_id"]
     pce = module.params["pce"]
     API = pce + "/api/v2/" + org_href + "/labels"
 
@@ -140,7 +141,7 @@ def run_module():
                     key = rows["type"]
                     value = rows["name"]
                     if key == 'loc' or key == 'env' or key == 'role' or key == 'app':
-                        response = requests.post(API, auth=HTTPBasicAuth(login, password), data=json.dumps({"key": key, "value": value}))
+                        response = requests.post(API, auth=HTTPBasicAuth(login, auth_secret), data=json.dumps({"key": key, "value": value}))
                         list["success"].append(key + " : " + value)
                     else:
                         list["error"].append("Invalid type:" + key + ". Type should be either env,app,loc,role")
@@ -148,7 +149,7 @@ def run_module():
             if l_type == 'env' or l_type == 'loc' or l_type == 'app' or l_type == 'role':
                 y = {"key": l_type, "value": l_name}
                 list["success"].append(l_type + " : " + l_name)
-                response = requests.post(API, auth=HTTPBasicAuth(login, password), data=json.dumps({"key": l_type, "value": l_name}))
+                response = requests.post(API, auth=HTTPBasicAuth(login, auth_secret), data=json.dumps({"key": l_type, "value": l_name}))
             else:
                 module.exit_json(msg="Invalid type value.", failed=l_type)
         else:

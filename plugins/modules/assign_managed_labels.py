@@ -8,26 +8,26 @@ module: respiro.illumio.assign_managed_labels
 
 short_description: This is the module to assign labels to managed workloads from the csv file.
 
-version_added: "1.0.1"
+version_added: "1.0.2"
 
 description: This module assigns labels to managed workloads. First the csv file is read and workloads from
 csv file is compared to managed workloads in PCE and labels are assigned to those workloads.
 
 options:
-    user:
+    username:
         description: This takes the user key value to access Illumio API
         required: true
         type: str
-    password:
-        description: This takes the user passkey to access Illumio API
+    auth_secret:
+        description: This takes the API secret key to access Illumio API
         required: true
         type: str
     pce:
         description: This takes the url link to Illumio PCE
         required: true
         type: str
-    org-href:
-        description: This takes the organisation href for Illumio PCE
+    org_id:
+        description: This takes the organisation id for Illumio PCE
         required: true
         type: str
     workload:
@@ -42,10 +42,10 @@ author:
 EXAMPLES = r'''
 - name: Test with a message
   respiro.illumio.assign_managed_labels:
-    user: "testusername"
-    password: "testpassword"
+    username: "testusername"
+    auth_secret: "testpassword"
     pce: "https://poc1.illum.io"
-    org_href: "orgs/85"
+    org_id: "85"
     workload: 'workload.csv'
 '''
 
@@ -80,10 +80,10 @@ from requests.auth import HTTPBasicAuth
 def run_module():
     module_args = dict(
         workload=dict(type='str', required=True),
-        user=dict(type='str', required=True),
-        password=dict(type='str', required=True),
+        username=dict(type='str', required=True),
+        auth_secret=dict(type='str', required=True),
         pce=dict(type='str', required=True),
-        org_href=dict(type='str', required=True),
+        org_id=dict(type='str', required=True),
     )
     result = dict()
     module = AnsibleModule(
@@ -91,12 +91,12 @@ def run_module():
         supports_check_mode=True
     )
     workload = module.params['workload']
-    user = module.params["user"]
-    password = module.params["password"]
-    org_href = module.params["org_href"]
+    username = module.params["username"]
+    auth_secret = module.params["auth_secret"]
+    org_id = module.params["org_id"]
     pce = module.params["pce"]
-    API = pce + "/api/v2/" + org_href + "/workloads?managed=true"
-    labels_API = pce + "/api/v2/" + org_href + "/labels"
+    API = pce + "/api/v2/orgs/" + org_id + "/workloads?managed=true"
+    labels_API = pce + "/api/v2/orgs/" + org_id + "/labels"
     list = {}
     list['assigned'] = []
     list['not_assigned'] = []
@@ -106,14 +106,14 @@ def run_module():
 
     # If the API data gets large(>500), async function is called
     async def async_api(api):
-        async with aiohttp.ClientSession(auth=aiohttp.BasicAuth(user, password)) as session:
+        async with aiohttp.ClientSession(auth=aiohttp.BasicAuth(username, auth_secret)) as session:
             async with session.get(api) as resp:
                 response = await resp.read()
         return response
 
     # Function to get the list of labels from PCE
     def display_labels():
-        response = requests.get(labels_API, auth=HTTPBasicAuth(user, password))
+        response = requests.get(labels_API, auth=HTTPBasicAuth(username, auth_secret))
         if len(response.content) == 500:
             response = async_api(labels_API)
         obj = json.loads(response.content)
@@ -135,7 +135,7 @@ def run_module():
 
     # Function to add labels to PCE
     def create_label(type, name):
-        return requests.post(labels_API, auth=HTTPBasicAuth(user, password),
+        return requests.post(labels_API, auth=HTTPBasicAuth(username, auth_secret),
                              data=json.dumps({"key": type, "value": name})).content
 
     # Main code: Checks csv file and compares labels in pce and labels in csv file, and assign labels to worloads
@@ -151,7 +151,7 @@ def run_module():
             loc = rows['loc']
             
             # Get managed workload
-            response = requests.get(API, auth=HTTPBasicAuth(user, password))
+            response = requests.get(API, auth=HTTPBasicAuth(username, auth_secret))
             obj = json.loads(response.text)
 
             # Check if label already exists in PCE. If not add to PCE and get its href.
@@ -200,7 +200,7 @@ def run_module():
                         if loc_href:
                             label.append({"href": loc_href})
                         uri = pce + "/api/v2" + values['href']
-                        response = requests.put(uri, auth=HTTPBasicAuth(user, password),
+                        response = requests.put(uri, auth=HTTPBasicAuth(username, auth_secret),
                                                 data=json.dumps({'labels': label}))
                         list['assigned'].append(public_ip)    
             if check==0:

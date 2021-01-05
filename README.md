@@ -94,10 +94,10 @@ Here are some of the example of using the modules
   tasks:
     - name: Display the list of label
       respiro.illumio.display_label_info:
-        user: "api_12321323cf4545"
-        password: "097jhdjksb9387384hjd3384bnfj93"
+        username: "api_12321323cf4545"
+        auth_secret: "097jhdjksb9387384hjd3384bnfj93"
         pce: "https://poc1.illum.io"
-        org_href: "orgs/80"
+        org_id: "80"
         type: "all"
       register: data
 
@@ -114,10 +114,10 @@ Here are some of the example of using the modules
   tasks:
     - name: Add label to PCE
       respiro.illumio.create_label:
-        user: "api_12321323cf4545"
-        password: "097jhdjksb9387384hjd3384bnfj93"
+        username: "api_12321323cf4545"
+        auth_secret: "097jhdjksb9387384hjd3384bnfj93"
         pce: "https://poc1.illum.io"
-        org_href: "orgs/80"
+        org_id: "80"
         path: "label.csv"
       register: data 
 
@@ -134,10 +134,10 @@ Here are some of the example of using the modules
   tasks:
     - name: Add label to PCE
       respiro.illumio.create_label:
-        user: "api_12321323cf4545"
-        password: "097jhdjksb9387384hjd3384bnfj93"
+        username: "api_12321323cf4545"
+        auth_secret: "097jhdjksb9387384hjd3384bnfj93"
         pce: "https://poc1.illum.io"
-        org_href: "orgs/80"
+        org_id: "80"
         type: "loc"
         name: "new_location"
       register: data 
@@ -155,10 +155,10 @@ Here are some of the example of using the modules
   tasks:
     - name: Add workload to PCE
       respiro.illumio.create_umw:
-        user: "api_12321323cf4545"
-        password: "097jhdjksb9387384hjd3384bnfj93"
+        username: "api_12321323cf4545"
+        auth_secret: "097jhdjksb9387384hjd3384bnfj93"
         pce: "https://poc1.illum.io"
-        org_href: "orgs/80"
+        org_id: "80"
         workload: "unmanaged_workload.csv"
       register: data 
 
@@ -175,10 +175,6 @@ Here are some of the example of using the modules
   tasks:
     - name: Deploy VEN
       respiro.illumio.assign_ven:
-        user: "api_12321323cf4545"
-        password: "097jhdjksb9387384hjd3384bnfj93"
-        pce: "https://poc1.illum.io"
-        org_href: "orgs/80"
         workload: 'workload.csv'
         linux_script: 'linuxPairing.sh'
       register: data
@@ -196,10 +192,10 @@ Here are some of the example of using the modules
   tasks:
     - name: Assign labels to VEN installed workloads
       respiro.illumio.assign_managed_labels:
-        user: "api_12321323cf4545"
-        password: "097jhdjksb9387384hjd3384bnfj93"
+        username: "api_12321323cf4545"
+        auth_secret: "097jhdjksb9387384hjd3384bnfj93"
         pce: "https://poc1.illum.io"
-        org_href: "orgs/80"
+        org_id: "80"
         workload: 'workload.csv'
       register: data
 

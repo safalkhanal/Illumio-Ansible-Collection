@@ -8,29 +8,12 @@ module: respiro.illumio.assign_ven
 
 short_description: This is the module to assign VEN to a workloads
 
-version_added: "1.0.1"
+version_added: "1.0.2"
 
 description: This module lets user to add managed workload to PCE. First the csv file containing workload information is
-read and script is run in the machine to install ven. Then the managed workload is matched with the machines from csv
-file and appropriate labels are given.
+read and script is run in the machine to install ven. This module will installn VEN to linux machines only.
 
 options:
-    user:
-        description: This takes the user key value to access Illumio API
-        required: true
-        type: str
-    password:
-        description: This takes the user secret key to access Illumio API
-        required: true
-        type: str
-    pce:
-        description: This takes the url link to Illumio PCE
-        required: true
-        type: str
-    org-href:
-        description: This takes the organisation href for Illumio PCE
-        required: true
-        type: str
     workload:
         description: This takes the path to csv file contatining workload information
         required: true
@@ -52,10 +35,6 @@ EXAMPLES = r'''
 # Pass in a message
 - name: Test with a message
   respiro.illumio.assign_ven:
-    user: "testusername"
-    password: "testpassword"
-    pce: "https://poc1.illum.io"
-    org_href: "orgs/85"
     workload: 'workload.csv'
     linux_script : 'linuxPairing.sh'
 '''
@@ -93,10 +72,6 @@ def run_module():
         workload=dict(type='str', required=True),
         linux_script=dict(type='str', required=False),
         win_script=dict(type='str', required=False),
-        user=dict(type='str', required=True),
-        password=dict(type='str', required=True),
-        pce=dict(type='str', required=True),
-        org_href=dict(type='str', required=True),
     )
     result = dict()
     module = AnsibleModule(
@@ -106,12 +81,6 @@ def run_module():
     workload = module.params['workload']
     linux_script = module.params['linux_script']
     win_script = module.params['win_script']
-    user = module.params["user"]
-    password = module.params["password"]
-    org_href = module.params["org_href"]
-    pce = module.params["pce"]
-    API = pce + "/api/v2/" + org_href + "/workloads?managed=true"
-    labels_API = pce + "/api/v2/" + org_href + "/labels"
     list = {}
     list["deployed"] = []
     list["not_deployed"] = []
