@@ -56,9 +56,9 @@ type,name
 * To add unmanaged workloads to PCE with labels
 
 ```csv
-name,hostname,username,password,ip,role,app,env,loc
-<name>,<workload hostname>,<workload login>,<workload password>,<ip>,<role label>,<application label>,<environment label>,<location label>
-<name>,<workload hostname>,<workload login>,<workload password>,<ip>,<role label>,<application label>,<environment label>,<location label>
+name,hostname,ip,role,app,env,loc
+<name>,<workload hostname>,<ip>,<role label>,<application label>,<environment label>,<location label>
+<name>,<workload hostname>,<ip>,<role label>,<application label>,<environment label>,<location label>
 .
 .
 ```

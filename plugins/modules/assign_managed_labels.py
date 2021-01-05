@@ -155,28 +155,28 @@ def run_module():
             obj = json.loads(response.text)
 
             # Check if label already exists in PCE. If not add to PCE and get its href.
-            if role is not None:
+            if role is not "":
                 if role in labels_details['role']:
                     role_href = labels_details['role'][role]
                 else:
                     href = create_label("role", role)[0]
                     labels_details['role'][role] = href
                     role_href = href
-            if app is not None:
+            if app is not "":
                 if app in labels_details['app']:
                     app_href = labels_details['app'][app]
                 else:
                     href = create_label("app", app)[0]
                     labels_details['app'][app] = href
                     app_href = href
-            if env is not None:
+            if env is not "":
                 if env in labels_details['env']:
                     env_href = labels_details['env'][env]
                 else:
                     href = create_label("env", env)[0]
                     labels_details['env'][env] = href
                     env_href = href
-            if loc is not None:
+            if loc is not "":
                 if loc in labels_details['loc']:
                     loc_href = labels_details['loc'][loc]
                 else:
