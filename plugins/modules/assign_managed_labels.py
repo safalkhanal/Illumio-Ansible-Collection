@@ -149,40 +149,48 @@ def run_module():
             app = rows['app']
             env = rows['env']
             loc = rows['loc']
-            
+
             # Get managed workload
             response = requests.get(API, auth=HTTPBasicAuth(username, auth_secret))
             obj = json.loads(response.text)
 
             # Check if label already exists in PCE. If not add to PCE and get its href.
-            if role is not "":
+            if role != "":
                 if role in labels_details['role']:
                     role_href = labels_details['role'][role]
                 else:
                     href = create_label("role", role)[0]
                     labels_details['role'][role] = href
                     role_href = href
-            if app is not "":
+            else:
+                role_href = ""
+            if app != "":
                 if app in labels_details['app']:
                     app_href = labels_details['app'][app]
                 else:
                     href = create_label("app", app)[0]
                     labels_details['app'][app] = href
                     app_href = href
-            if env is not "":
+            else:
+                app_href = ""
+            if env != "":
                 if env in labels_details['env']:
                     env_href = labels_details['env'][env]
                 else:
                     href = create_label("env", env)[0]
                     labels_details['env'][env] = href
                     env_href = href
-            if loc is not "":
+            else:
+                env_href = ""
+            if loc != "":
                 if loc in labels_details['loc']:
                     loc_href = labels_details['loc'][loc]
                 else:
                     href = create_label("loc", loc)[0]
                     labels_details['loc'][loc] = href
                     loc_href = href
+            else:
+                loc_href = ""
 
             # check the managed workload with workload from csv file and assign labels
             check = 0
@@ -202,8 +210,8 @@ def run_module():
                         uri = pce + "/api/v2" + values['href']
                         response = requests.put(uri, auth=HTTPBasicAuth(username, auth_secret),
                                                 data=json.dumps({'labels': label}))
-                        list['assigned'].append(public_ip)    
-            if check==0:
+                        list['assigned'].append(public_ip)
+            if check == 0:
                 list['not_assigned'].append(public_ip)
         module.exit_json(changed=True, labels_assigned=list['assigned'], not_assigned=list['not_assigned'])
 
