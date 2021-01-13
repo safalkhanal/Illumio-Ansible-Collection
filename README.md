@@ -169,7 +169,7 @@ intructions below to create a managed workload
 ### To add managed workload to PCE 
 
 All that required for any OS (virtual or physical) to become a managed workload is to have 
-a VEN installed on it using the script provided by the PCE<br>
+a VEN installed on it using the script provided by the PCE
 1. First head to PCE and create a Pairing Profile (Pairing Profile is a configuration that allow user 
 to apply properties to the workload as they pair with the PCE; Labels, policies, etc. are applied this way)
 2. Generate a pairing key/activation code for that Profile
@@ -179,16 +179,14 @@ to apply properties to the workload as they pair with the PCE; Labels, policies,
     - For Windows: run on **PowerShell** (`win_shell`) as **Administrator** (`become: true`)
     - For Linux: run on **Linux CLI** (`script`) as **Root** (`become: true`)
 6. The VEN will automatically pair the machine to the PCE if the installation is successful<br>
-<br>
 
-The newly added machine displayed on the PCE will get all the information the VEN collected:<br>
+The newly added machine displayed on the PCE will get all the information the VEN collected:
 * Name (taken from the name of the machine)
 * Interfaces
 * IP
 * OS
 * ...
 * **Labels** and **policies** are dictated by the Pairing Profile<br>
-<br>
 
 Please note that managed workload can't be downgraded into unmanaged workload, 
 unpairing the VEN will remove the workload from the PCE
