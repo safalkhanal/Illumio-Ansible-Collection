@@ -102,6 +102,7 @@ All modules are ran through **localhost**
       debug:
          msg: '{{ data }}'
 ```
+---
 ### To add labels to PCE using csv file
 
 ```yaml
@@ -122,6 +123,7 @@ All modules are ran through **localhost**
       debug:
          msg: '{{ data }}'
 ```
+---
 ### To add single label information to PCE 
 
 ```yaml
@@ -143,6 +145,7 @@ All modules are ran through **localhost**
       debug:
         msg: '{{ data }}'
 ```
+---
 ### To add unmanaged workloads with labels to PCE 
 
 Please note that unmanaged workloads can't be upgraded into managed workload, user will need to follow 
@@ -166,6 +169,7 @@ intructions below to create a managed workload
       debug:
         msg: '{{ data }}'
 ```
+---
 ### To add managed workload to PCE 
 
 All that required for any OS (virtual or physical) to become a managed workload is to have 
@@ -210,6 +214,7 @@ The example below is for **Linux**, the code will need to be adapted to work for
     debug:
       msg: '{{ test_output }}'
 ```
+---
 ### Adding unmanaged and managed workloads at the same time
 
 To add both type of workloads in the same playbook:
@@ -245,6 +250,7 @@ To add both type of workloads in the same playbook:
     debug:
       msg: '{{ test_output }}'
 ```
+---
 ### Assign labels to managed workoads
 
 Required permission from Pairing Profile to work: *If label assignment is **not locked***
@@ -269,6 +275,7 @@ Can't be used in the same playbook as the task used to create **managed** worklo
       debug:
         msg: '{{ data }}'
 ```
+---
 ### Update existing label's name
 
 ```yaml
