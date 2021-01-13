@@ -80,6 +80,8 @@ ip,role,app,env,loc
 ## Examples: using the modules
 Here are some of the example of using the modules
 
+All modules are ran through **localhost**
+
 * To get label data from PCE
 
 ```yaml
@@ -143,6 +145,9 @@ Here are some of the example of using the modules
 ```
 * To add unmanaged workloads with labels to PCE 
 
+Please note that unmanaged workloads can't be upgraded into managed workload, user will need to follow 
+intructions below to create a managed workload
+
 ```yaml
 ---
 - name: Add unmanaged workload
@@ -161,22 +166,49 @@ Here are some of the example of using the modules
       debug:
         msg: '{{ data }}'
 ```
-* Deploy VEN to workoads from csv file 
+* To add managed workload to PCE 
+
+All that required for any OS (virtual or physical) to become a managed workload is to have 
+a VEN installed on it using the script provided by the PCE
+
+  1. First head to PCE and create a Pairing Profile (Pairing Profile is a configuration that allow user 
+  to apply properties to the workload as they pair with the PCE; Labels, policies, etc. are applied this way)
+  2. Generate a pairing key/activation code for that Profile
+  3. A pairing script containing the key will be generated automatically once the key is created
+  4. Copy the script (for Windows or Linux)
+  5. Run the script on target machine
+    * For Windows: run on **PowerShell** (win_shell) as **Administrator** (become: true)
+    * For Linux: run on **Linux CLI** (script) as **Root** (become: true)
+  6. The VEN will automatically pair the machine to the PCE if the installation is successful
+
+The newly added machine displayed on the PCE will get all the information the VEN collected:
+* Name (taken from the name of the machine)
+* Interfaces
+* IP
+* OS
+* ...
+With labels and policies dictates by the Pairing Profile
+
+Please note that managed workload can't be downgraded into unmanaged workload, 
+unpairing the VEN will remove the workload from the PCE
+
+The example below is for **Linux**, the code will need to be adapted to work for Windows
+
+*This script will need to be run on **target machines** instead of localhost, required ssh connection* 
 
 ```yaml
 ---
-- name: Deploy VEN to workloads from csv file
-  hosts: localhost
+- name: setup managed workload
+  hosts: test_server
   tasks:
-    - name: Deploy VEN
-      respiro.illumio.assign_ven:
-        workload: 'workload.csv'
-        linux_script: 'linuxPairing.sh'
-      register: data
+  - name: install VEN on linux machine
+    become: true
+    script: "linux_script.sh"
+    register: test_output
 
-    - name: output data
-      debug:
-        msg: '{{ data }}'
+  - name: dump test output
+    debug:
+      msg: '{{ test_output }}'
 ```
 * Assign labels to managed workoads
 
@@ -215,6 +247,7 @@ Here are some of the example of using the modules
       auth_secret: "54gf845v48rwe8wc548v8hr85d9abbe86a6555f8v8w8m85yh8yyy8h"
       new_value: "testing_0"
     register: test_output
+    
   - name: dump test output
     debug:
       msg: '{{ test_output }}'
