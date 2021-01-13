@@ -68,16 +68,6 @@ name,hostname,ip,role,app,env,loc
 .
 ```
 
-* To add managed workloads to PCE
-
-```csv
-username,password,ip,os
-<workload login username>,<workload password>,<workload ip>,<operating system>
-<workload login username>,<workload password>,<workload ip>,<operating system>
-.
-.
-```
-
 * To assign labels to managed workloads
 
 ```csv
