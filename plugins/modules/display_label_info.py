@@ -27,8 +27,8 @@ options:
         description: This takes the url link to Illumio PCE
         required: true
         type: str
-    org-href:
-        description: This takes the organisation href for Illumio PCE
+    org-id:
+        description: This takes the organisation ID for Illumio PCE
         required: true
         type: str
     type:

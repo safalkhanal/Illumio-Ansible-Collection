@@ -27,7 +27,7 @@ options:
         required: true
         type: str
     org_id:
-        description: This takes the organisation href for Illumio PCE
+        description: This takes the organisation ID for Illumio PCE
         required: true
         type: str
     workload:
