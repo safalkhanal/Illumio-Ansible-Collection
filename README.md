@@ -179,6 +179,7 @@ to apply properties to the workload as they pair with the PCE; Labels, policies,
     - For Windows: run on **PowerShell** (`win_shell`) as **Administrator** (`become: true`)
     - For Linux: run on **Linux CLI** (`script`) as **Root** (`become: true`)
 6. The VEN will automatically pair the machine to the PCE if the installation is successful<br>
+<br>
 
 The newly added machine displayed on the PCE will get all the information the VEN collected:
 * Name (taken from the name of the machine)
@@ -187,6 +188,7 @@ The newly added machine displayed on the PCE will get all the information the VE
 * OS
 * ...
 * **Labels** and **policies** are dictated by the Pairing Profile<br>
+<br>
 
 Please note that managed workload can't be downgraded into unmanaged workload, 
 unpairing the VEN will remove the workload from the PCE
