@@ -177,16 +177,16 @@ a VEN installed on it using the script provided by the PCE
   3. A pairing script containing the key will be generated automatically once the key is created
   4. Copy the script (for Windows or Linux)
   5. Run the script on target machine
-    * For Windows: run on **PowerShell** (win_shell) as **Administrator** (become: true)
-    * For Linux: run on **Linux CLI** (script) as **Root** (become: true)
+    * For Windows: run on **PowerShell** (`win_shell`) as **Administrator** (`become: true`)
+    * For Linux: run on **Linux CLI** (`script`) as **Root** (`become: true`)
   6. The VEN will automatically pair the machine to the PCE if the installation is successful
 
 The newly added machine displayed on the PCE will get all the information the VEN collected:
-* Name (taken from the name of the machine)
-* Interfaces
-* IP
-* OS
-* ...
+  * Name (taken from the name of the machine)
+  * Interfaces
+  * IP
+  * OS
+  * ...
 With labels and policies dictates by the Pairing Profile
 
 Please note that managed workload can't be downgraded into unmanaged workload, 
@@ -210,7 +210,46 @@ The example below is for **Linux**, the code will need to be adapted to work for
     debug:
       msg: '{{ test_output }}'
 ```
+* Adding unmanaged and managed workloads at the same time
+
+To add both type of workloads in the same playbook:
+  * The **hosts** should be the intended managed workloads (target machine to installed pairing script)
+  * The task for unmanaged workload required `delegate_to: localhost` to only activate on localhost
+  * The task for installing VEN required `become: true` to act as root or administrator
+
+```yaml
+---
+- name: adding workloads
+  hosts: test_server
+  tasks:
+  - name: add an umw to the pce
+    respiro.illumio.create_umw:
+      pce: "https://poc1.illum.io"
+      org_id: "86"
+      username: "api_1e454dv85ev8d18b"
+      auth_secret: "ff5df1ef552397878frfr8758r8tgf5d6e"
+      workload: "test_addingUMW.csv"
+    delegate_to: localhost
+    register: test_output
+
+  - name: dump test output
+    debug:
+      msg: '{{ test_output }}'
+
+  - name: install VEN on linux machine
+    become: true
+    script: "linux_script.sh"
+    register: test_output
+
+  - name: dump test output
+    debug:
+      msg: '{{ test_output }}'
+```
 * Assign labels to managed workoads
+
+Required permission from Pairing Profiles to work: If label assignment is not locked
+
+Can't be used in the same playbook as the task used to create **managed** workload
 
 ```yaml
 ---
