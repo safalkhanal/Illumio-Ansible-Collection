@@ -182,18 +182,12 @@ to apply properties to the workload as they pair with the PCE; Labels, policies,
 6. The VEN will automatically pair the machine to the PCE if the installation is successful
 
 The newly added machine displayed on the PCE will get all the information the VEN collected:
-
   * Name (taken from the name of the machine)
-
   * Interfaces
-  
   * IP
-  
   * OS
-  
   * ...
-
-With labels and policies dictates by the Pairing Profile
+  * **Labels** and **policies** are dictated by the Pairing Profile
 
 Please note that managed workload can't be downgraded into unmanaged workload, 
 unpairing the VEN will remove the workload from the PCE
