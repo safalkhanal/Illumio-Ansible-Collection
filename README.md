@@ -23,12 +23,16 @@ ansible-galaxy collection install respiro.illumio
 
 * Add unmanaged workloads to PCE
 * Assign labels to unmanaged workloads
-* Add managed workload to PCE
-* Assign labels to managed workload
+* Add managed workload to PCE [^1] 
+* Assign labels to managed workload [^2] 
 * Add single label data to Illumio PCE
 * Add multiple label data using csv file
 * Get the list of labels from PCE
 * Update the name (value) of existing label
+
+  [^1]: Although this is technically not a feature built in to this collection, it is still required to enable some modules to function correctly, instruction will be provided below, no prerequisite required
+
+  [^2]: Will only work if the Pairing Profile applied to this managed workload allow  
 
 ## Modules
 
