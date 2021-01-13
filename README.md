@@ -102,7 +102,6 @@ All modules are ran through **localhost**
       debug:
          msg: '{{ data }}'
 ```
----
 ### To add labels to PCE using csv file
 
 ```yaml
@@ -123,7 +122,6 @@ All modules are ran through **localhost**
       debug:
          msg: '{{ data }}'
 ```
----
 ### To add single label information to PCE 
 
 ```yaml
@@ -145,7 +143,6 @@ All modules are ran through **localhost**
       debug:
         msg: '{{ data }}'
 ```
----
 ### To add unmanaged workloads with labels to PCE 
 
 Please note that unmanaged workloads can't be upgraded into managed workload, user will need to follow 
@@ -169,12 +166,10 @@ intructions below to create a managed workload
       debug:
         msg: '{{ data }}'
 ```
----
 ### To add managed workload to PCE 
 
 All that required for any OS (virtual or physical) to become a managed workload is to have 
-a VEN installed on it using the script provided by the PCE
-
+a VEN installed on it using the script provided by the PCE<br>
 1. First head to PCE and create a Pairing Profile (Pairing Profile is a configuration that allow user 
 to apply properties to the workload as they pair with the PCE; Labels, policies, etc. are applied this way)
 2. Generate a pairing key/activation code for that Profile
@@ -183,15 +178,17 @@ to apply properties to the workload as they pair with the PCE; Labels, policies,
 5. Run the script on target machine
     - For Windows: run on **PowerShell** (`win_shell`) as **Administrator** (`become: true`)
     - For Linux: run on **Linux CLI** (`script`) as **Root** (`become: true`)
-6. The VEN will automatically pair the machine to the PCE if the installation is successful
+6. The VEN will automatically pair the machine to the PCE if the installation is successful<br>
+<br>
 
-The newly added machine displayed on the PCE will get all the information the VEN collected:
-  * Name (taken from the name of the machine)
-  * Interfaces
-  * IP
-  * OS
-  * ...
-  * **Labels** and **policies** are dictated by the Pairing Profile
+The newly added machine displayed on the PCE will get all the information the VEN collected:<br>
+* Name (taken from the name of the machine)
+* Interfaces
+* IP
+* OS
+* ...
+* **Labels** and **policies** are dictated by the Pairing Profile<br>
+<br>
 
 Please note that managed workload can't be downgraded into unmanaged workload, 
 unpairing the VEN will remove the workload from the PCE
@@ -214,7 +211,6 @@ The example below is for **Linux**, the code will need to be adapted to work for
     debug:
       msg: '{{ test_output }}'
 ```
----
 ### Adding unmanaged and managed workloads at the same time
 
 To add both type of workloads in the same playbook:
@@ -250,7 +246,6 @@ To add both type of workloads in the same playbook:
     debug:
       msg: '{{ test_output }}'
 ```
----
 ### Assign labels to managed workoads
 
 Required permission from Pairing Profile to work: *If label assignment is **not locked***
@@ -275,7 +270,6 @@ Can't be used in the same playbook as the task used to create **managed** worklo
       debug:
         msg: '{{ data }}'
 ```
----
 ### Update existing label's name
 
 ```yaml
