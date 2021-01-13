@@ -177,11 +177,8 @@ a VEN installed on it using the script provided by the PCE
   3. A pairing script containing the key will be generated automatically once the key is created
   4. Copy the script (for Windows or Linux)
   5. Run the script on target machine
-
-    * For Windows: run on **PowerShell** (`win_shell`) as **Administrator** (`become: true`)
-
-    * For Linux: run on **Linux CLI** (`script`) as **Root** (`become: true`)
-
+    - For Windows: run on **PowerShell** (`win_shell`) as **Administrator** (`become: true`)
+    - For Linux: run on **Linux CLI** (`script`) as **Root** (`become: true`)
   6. The VEN will automatically pair the machine to the PCE if the installation is successful
 
 The newly added machine displayed on the PCE will get all the information the VEN collected:
@@ -256,7 +253,7 @@ To add both type of workloads in the same playbook:
 ```
 ### Assign labels to managed workoads
 
-Required permission from Pairing Profile to work: If label assignment is **not locked**
+Required permission from Pairing Profile to work: *If label assignment is **not locked***
 
 Can't be used in the same playbook as the task used to create **managed** workload
 
