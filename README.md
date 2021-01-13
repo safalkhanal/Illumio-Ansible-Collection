@@ -171,15 +171,15 @@ intructions below to create a managed workload
 All that required for any OS (virtual or physical) to become a managed workload is to have 
 a VEN installed on it using the script provided by the PCE
 
-  1. First head to PCE and create a Pairing Profile (Pairing Profile is a configuration that allow user 
-  to apply properties to the workload as they pair with the PCE; Labels, policies, etc. are applied this way)
-  2. Generate a pairing key/activation code for that Profile
-  3. A pairing script containing the key will be generated automatically once the key is created
-  4. Copy the script (for Windows or Linux)
-  5. Run the script on target machine
+1. First head to PCE and create a Pairing Profile (Pairing Profile is a configuration that allow user 
+to apply properties to the workload as they pair with the PCE; Labels, policies, etc. are applied this way)
+2. Generate a pairing key/activation code for that Profile
+3. A pairing script containing the key will be generated automatically once the key is created
+4. Copy the script (for Windows or Linux)
+5. Run the script on target machine
     - For Windows: run on **PowerShell** (`win_shell`) as **Administrator** (`become: true`)
     - For Linux: run on **Linux CLI** (`script`) as **Root** (`become: true`)
-  6. The VEN will automatically pair the machine to the PCE if the installation is successful
+6. The VEN will automatically pair the machine to the PCE if the installation is successful
 
 The newly added machine displayed on the PCE will get all the information the VEN collected:
 
