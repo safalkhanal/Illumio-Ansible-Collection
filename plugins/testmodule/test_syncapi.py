@@ -1,3 +1,5 @@
+import sys
+sys.path.append('../helpermodules')
 from credential import Credential
 from api_calls import sync_api
 import json
