@@ -22,9 +22,8 @@ ansible-galaxy collection install respiro.illumio
 ## Features
 
 * Add unmanaged workloads to PCE
-* Assign labels to unmanaged workloads
 * Add managed workload to PCE * 
-* Assign labels to managed workload 
+* Assign labels to workloads (both managed & unmanaged)
 * Add single label data to Illumio PCE
 * Add multiple label data using csv file
 * Get the list of labels from PCE
@@ -39,7 +38,7 @@ ansible-galaxy collection install respiro.illumio
 * ``` create_label  ```: This module adds labels to PCE. User can add single label information by supplying the type and name of the label or add multiple labels by giving the path to the CSV file.
 * ``` display_label_info  ```: This module retrieves label information from PCE
 * ``` create_umw  ```: Adds the unmanaged workloads from the CSV file to PCE and assigned labels from the same CSV file
-* ``` assign_managed_labels  ```: This module assigns labels to managed workloads.
+* ``` assign_labels  ```: This module assigns labels to workloads.
 * ``` update_label ```: This module updates existing label's name
 
 ## CSV file format
@@ -66,12 +65,12 @@ name,hostname,ip,role,app,env,loc
 .
 ```
 
-* To assign labels to managed workloads
+* To assign/edit workloads' labels
 
 ```csv
 ip,role,app,env,loc
-<managed workload ip>,<role label>,<application label>,<environment label>,<location label>
-<managed workload ip>,<role label>,<application label>,<environment label>,<location label>
+<workload ip>,<role label>,<application label>,<environment label>,<location label>
+<workload ip>,<role label>,<application label>,<environment label>,<location label>
 .
 .
 ```
@@ -307,7 +306,7 @@ The example below is for **Linux**, the code will need to be adapted to work for
 
 <br>
 
-* **Assign labels to managed workoads**
+* **Assign labels to workoads**
 
 ```yaml
 ---
@@ -315,7 +314,7 @@ The example below is for **Linux**, the code will need to be adapted to work for
   hosts: localhost
   tasks:
     - name: Assign labels to VEN installed workloads
-      respiro.illumio.assign_managed_labels:
+      respiro.illumio.assign_labels:
         username: "api_12321323cf4545"
         auth_secret: "097jhdjksb9387384hjd3384bnfj93"
         pce: "https://poc1.illum.io"

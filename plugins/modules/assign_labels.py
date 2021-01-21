@@ -4,14 +4,14 @@ __metaclass__ = type
 
 DOCUMENTATION = r'''
 ---
-module: respiro.illumio.assign_managed_labels
+module: respiro.illumio.assign_labels
 
-short_description: This is the module to assign labels to managed workloads from the csv file.
+short_description: This is the module to assign/edit labels to workloads from the csv file.
 
 version_added: "1.0.2"
 
-description: This module assigns labels to managed workloads. First the csv file is read and workloads from
-csv file is compared to managed workloads in PCE and labels are assigned to those workloads.
+description: This module assigns labels to workloads. First the csv file is read and workloads from
+csv file is compared to workloads in PCE and labels are assigned to those workloads.
 
 options:
     username:
@@ -31,17 +31,18 @@ options:
         required: true
         type: str
     workload:
-        description: This takes the path to csv file contatining workload information
+        description: This takes the path to csv file containing workload information
         required: true
         type: str
 
 author:
     - Safal Khanal (@Safalkhanal)
+    - Nghia Huu (David) Nguyen (@DAVPFSN)
 '''
 
 EXAMPLES = r'''
 - name: Test with a message
-  respiro.illumio.assign_managed_labels:
+  respiro.illumio.assign_labels:
     username: "testusername"
     auth_secret: "testpassword"
     pce: "https://poc1.illum.io"
@@ -95,7 +96,7 @@ def run_module():
     auth_secret = module.params["auth_secret"]
     org_id = module.params["org_id"]
     pce = module.params["pce"]
-    API = pce + "/api/v2/orgs/" + org_id + "/workloads?managed=true"
+    API = pce + "/api/v2/orgs/" + org_id + "/workloads"
     labels_API = pce + "/api/v2/orgs/" + org_id + "/labels"
     list = {}
     list['assigned'] = []
