@@ -306,14 +306,14 @@ The example below is for **Linux**, the code will need to be adapted to work for
 
 <br>
 
-* **Assign labels to workoads**
+* **Assign labels to workloads**
 
 ```yaml
 ---
-- name: Assign labels to managed workloads
+- name: Assign labels to workloads
   hosts: localhost
   tasks:
-    - name: Assign labels to VEN installed workloads
+    - name: Assign labels to workloads
       respiro.illumio.assign_labels:
         username: "api_12321323cf4545"
         auth_secret: "097jhdjksb9387384hjd3384bnfj93"
@@ -325,6 +325,54 @@ The example below is for **Linux**, the code will need to be adapted to work for
     - name: output data
       debug:
         msg: '{{ data }}'
+```
+
+<br>
+
+---
+
+<br>
+
+* **Creating workloads and assigning labels in the same playbook**
+
+    * It's recommended that a pause of approximately 8-15 seconds should take place right after the tasks used to create workloads (both managed and unmanaged); This allows the PCE some times to update the new information to the system
+
+    * Without the pause, there is a high chance that the labels won't be applied (since the new workloads wasn't updated yet) and user will need to rerun the task to assign labels
+
+```yaml
+---
+- name: adding workloads and assigning labels
+  hosts: localhost
+  tasks:
+  - name: add an umw to the pce
+    respiro.illumio.create_umw:
+      pce: "https://poc1.illum.io"
+      org_id: "86"
+      username: "api_1e454dv85ev8d18b"
+      auth_secret: "ff5df1ef552397878frfr8758r8tgf5d6e"
+      workload: "test_addingUMW.csv"
+    register: test_output
+
+  - name: dump test output
+    debug:
+      msg: '{{ test_output }}'
+
+  - name: Pause to allow time for the PCE to update new information
+    pause:
+      seconds: 15
+
+  - name: Assign labels to workloads
+    respiro.illumio.assign_labels:
+      username: "api_12321323cf4545"
+      auth_secret: "097jhdjksb9387384hjd3384bnfj93"
+      pce: "https://poc1.illum.io"
+      org_id: "80"
+      workload: 'workload.csv'
+    register: data
+
+  - name: output data
+    debug:
+      msg: '{{ data }}'
 ```
 
 <br>

@@ -70,6 +70,7 @@ original_message:
 
 from ansible.module_utils.compat.paramiko import paramiko
 from ansible.module_utils.basic import AnsibleModule
+import time
 import csv
 import json
 import requests
@@ -151,7 +152,7 @@ def run_module():
             env = rows['env']
             loc = rows['loc']
 
-            # Get managed workload
+            # Get workloads from the PCE
             response = requests.get(API, auth=HTTPBasicAuth(username, auth_secret))
             obj = json.loads(response.text)
 
@@ -160,7 +161,7 @@ def run_module():
                 if role in labels_details['role']:
                     role_href = labels_details['role'][role]
                 else:
-                    href = create_label("role", role)[0]
+                    href = json.loads(create_label("role", role))['href']
                     labels_details['role'][role] = href
                     role_href = href
             else:
@@ -169,7 +170,7 @@ def run_module():
                 if app in labels_details['app']:
                     app_href = labels_details['app'][app]
                 else:
-                    href = create_label("app", app)[0]
+                    href = json.loads(create_label("app", app))['href']
                     labels_details['app'][app] = href
                     app_href = href
             else:
@@ -178,7 +179,7 @@ def run_module():
                 if env in labels_details['env']:
                     env_href = labels_details['env'][env]
                 else:
-                    href = create_label("env", env)[0]
+                    href = json.loads(create_label("env", env))['href']
                     labels_details['env'][env] = href
                     env_href = href
             else:
@@ -187,13 +188,16 @@ def run_module():
                 if loc in labels_details['loc']:
                     loc_href = labels_details['loc'][loc]
                 else:
-                    href = create_label("loc", loc)[0]
+                    href = json.loads(create_label("loc", loc))['href']
                     labels_details['loc'][loc] = href
                     loc_href = href
             else:
                 loc_href = ""
 
-            # check the managed workload with workload from csv file and assign labels
+            # Wait for the PCE to finish creating the new labels
+            time.sleep(4.0)
+
+            # check the workload from PCE with workload from csv file and assign labels
             check = 0
             for values in obj:
                 for data in values['interfaces']:
