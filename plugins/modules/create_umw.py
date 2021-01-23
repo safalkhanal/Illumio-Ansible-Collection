@@ -37,6 +37,7 @@ options:
 
 author:
     - Safal Khanal (@Safalkhanal)
+    - Nghia Huu (David) Nguyen (@DAVPFSN)
 '''
 
 EXAMPLES = r'''
