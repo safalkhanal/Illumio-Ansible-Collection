@@ -13,7 +13,7 @@ pip install pypsexec
 pip install paramiko
 pip install asyncio
 ```
-This collections is packaged under ansible-galaxy, so to install it you need to run following command:
+This collections is packaged under ansible-galaxy, so to install it you need to run the following command:
 
 ```
 ansible-galaxy collection install respiro.illumio
@@ -68,9 +68,9 @@ name,hostname,ip,role,app,env,loc
 * To assign/edit workloads' labels
 
 ```csv
-ip,role,app,env,loc
-<workload ip>,<role label>,<application label>,<environment label>,<location label>
-<workload ip>,<role label>,<application label>,<environment label>,<location label>
+hostname,role,app,env,loc
+<workload hostname>,<role label>,<application label>,<environment label>,<location label>
+<workload hostname>,<role label>,<application label>,<environment label>,<location label>
 .
 .
 ```

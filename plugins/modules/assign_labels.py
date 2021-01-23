@@ -59,10 +59,10 @@ original_message:
             "changed": true,
             "failed": false,
             "labels_assigned": [
-                "192.168.1.113"
+                "success.com"
             ],
             "not_assigned": [
-                "19.16.1.111"
+                "fail.com"
             ],
         }
     }
@@ -146,7 +146,7 @@ def run_module():
     with open(workload, 'r') as details:
         workload_details = csv.DictReader(details, delimiter=",")
         for rows in workload_details:
-            public_ip = rows["ip"]
+            hostname = rows["hostname"]
             role = rows['role']
             app = rows['app']
             env = rows['env']
@@ -195,29 +195,30 @@ def run_module():
                 loc_href = ""
 
             # Wait for the PCE to finish creating the new labels
+            # This is just a fail-safe
+            # Might not be necessary
             time.sleep(4.0)
 
             # check the workload from PCE with workload from csv file and assign labels
             check = 0
             for values in obj:
-                for data in values['interfaces']:
-                    if data['address'] == public_ip or values['public_ip'] == public_ip:
-                        check = 1
-                        label = []
-                        if role_href:
-                            label.append({"href": role_href})
-                        if app_href:
-                            label.append({"href": app_href})
-                        if env_href:
-                            label.append({"href": env_href})
-                        if loc_href:
-                            label.append({"href": loc_href})
-                        uri = pce + "/api/v2" + values['href']
-                        response = requests.put(uri, auth=HTTPBasicAuth(username, auth_secret),
-                                                data=json.dumps({'labels': label}))
-                        list['assigned'].append(public_ip)
+                if values['hostname'] == hostname:
+                    check = 1
+                    label = []
+                    if role_href:
+                        label.append({"href": role_href})
+                    if app_href:
+                        label.append({"href": app_href})
+                    if env_href:
+                        label.append({"href": env_href})
+                    if loc_href:
+                        label.append({"href": loc_href})
+                    uri = pce + "/api/v2" + values['href']
+                    response = requests.put(uri, auth=HTTPBasicAuth(username, auth_secret),
+                                            data=json.dumps({'labels': label}))
+                    list['assigned'].append(hostname)
             if check == 0:
-                list['not_assigned'].append(public_ip)
+                list['not_assigned'].append(hostname)
         module.exit_json(changed=True, labels_assigned=list['assigned'], not_assigned=list['not_assigned'])
 
 
