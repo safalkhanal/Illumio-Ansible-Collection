@@ -66,6 +66,7 @@ sample:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
+import time
 import json
 import csv
 import requests
@@ -198,30 +199,44 @@ def run_module():
                 if role in labels_details['role']:
                     role = labels_details['role'][role]
                 else:
-                    href = create_label(creds, "role", role)[0]
+                    href = json.loads(create_label(creds, "role", role))['href']
                     labels_details['role'][role] = href
                     role = href
+            else:
+                role = ""
             if app is not "":
                 if app in labels_details['app']:
                     app = labels_details['app'][app]
                 else:
-                    href = create_label(creds, "app", app)[0]
+                    href = json.loads(create_label(creds, "app", app))['href']
                     labels_details['app'][app] = href
                     app = href
+            else:
+                app = ""
             if env is not "":
                 if env in labels_details['env']:
                     env = labels_details['env'][env]
                 else:
-                    href = create_label(creds, "env", env)[0]
+                    href = json.loads(create_label(creds, "env", env))['href']
                     labels_details['env'][env] = href
                     env = href
+            else:
+                env = ""
             if loc is not "":
                 if loc in labels_details['loc']:
                     loc = labels_details['loc'][loc]
                 else:
-                    href = create_label(creds, "loc", loc)[0]
+                    href = json.loads(create_label(creds, "loc", loc))['href']
                     labels_details['loc'][loc] = href
                     loc = href
+            else:
+                loc = ""
+
+            # Wait for the PCE to finish creating the new labels
+            # This is just a fail-safe
+            # Might not be necessary
+            time.sleep(4.0)
+
             wl = create_umw(creds, name, hostname, ip, role, app, env, loc)
     module.exit_json(changed=True, meta='Workload added')
 
