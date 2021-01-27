@@ -107,7 +107,7 @@ from requests.auth import HTTPBasicAuth
 
 # Import helper modules
 from ansible_collections.respiro.illumio.plugins.module_utils.credential import Credential
-from ansible_collections.respiro.illumio.plugins.module_utils.api_calls import sync_api
+from ansible_collections.respiro.illumio.plugins.module_utils.labels import create_label
 
 
 def run_module():
@@ -148,7 +148,7 @@ def run_module():
                     key = rows["type"]
                     value = rows["name"]
                     if key == 'loc' or key == 'env' or key == 'role' or key == 'app':
-                        response = sync_api(cred, "post", "/labels", True, {"key": key, "value": value})
+                        response = create_label(cred, key, value)
                         list["success"].append(key + " : " + value)
                     else:
                         list["error"].append("Invalid type:" + key + ". Type should be either env,app,loc,role")
@@ -156,7 +156,7 @@ def run_module():
             if l_type == 'env' or l_type == 'loc' or l_type == 'app' or l_type == 'role':
                 y = {"key": l_type, "value": l_name}
                 list["success"].append(l_type + " : " + l_name)
-                response = sync_api(cred, "post", "/labels", True, {"key": l_type, "value": l_name})
+                response = create_label(cred, l_type, l_name)
             else:
                 module.exit_json(msg="Invalid type value.", failed=l_type)
         else:
