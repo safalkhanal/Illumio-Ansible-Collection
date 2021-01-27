@@ -43,12 +43,13 @@ def sync_api(creds, http_verb, resource, has_org, payload=None):
     return response
 
 
-# Making an asynchronous "GET" API call
+# Making an asynchronous "GET" API request
 # For OVER 500 items being queried on the server ("GET" operation)
 # NOTE: only apply to "GET" HTTP operation and therefore doesn't require a http verb
-# Requires a credential, resource to access (e.g. /labels for labels),
+# Requires a credential,
+# Resource to access (e.g. /labels for labels),
 # Does it contains the org_href or not
-# And the data to push
+# And the data to push (unlikely to be used, since this will be a "GET" operation)
 def async_api(creds, resource, has_org, payload=None):
     # Use different url depends on if the call requires an org_href
     if has_org:
