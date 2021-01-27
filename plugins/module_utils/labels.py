@@ -7,7 +7,7 @@ Operations with labels:
 """
 
 __author__ = "Nghia Huu (David) Nguyen"
-__copyright__ = "Copyright 2020"
+__copyright__ = "Copyright 2021"
 __credits__ = ["David Nguyen"]
 __license__ = "GPL"
 __version__ = "1.0.0"
