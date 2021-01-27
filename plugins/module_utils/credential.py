@@ -2,8 +2,8 @@
 
 """
 Declaring Credential object:
-- Store login information: username, authentication secret
-- PCE, port, org_href
+Store login information: username, authentication secret
+PCE, port, org_href
 """
 
 __author__ = "Nghia Huu (David) Nguyen"

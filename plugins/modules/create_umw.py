@@ -19,7 +19,7 @@ options:
         required: true
         type: str
     auth_secret:
-        description: This takes the api secret keyu to access Illumio API. From API key, place the Secret value here
+        description: This takes the api secret key to access Illumio API. From API key, place the Secret value here
         required: true
         type: str
     pce:
