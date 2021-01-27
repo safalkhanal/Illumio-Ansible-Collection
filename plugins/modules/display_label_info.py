@@ -11,7 +11,7 @@ version_added: "1.0.8"
 short_description: This is the module to display Illumio labels
 
 
-description: Use this module to get the list of labels in yout illumio. This module can either fetch data for individual
+description: Use this module to get the list of labels in your illumio. This module can either fetch data for individual
  sets of labels or fetch all the labels data.
 
 options:
@@ -39,6 +39,7 @@ options:
 
 author:
     - Safal Khanal (@safalkhanal99)
+    - Nghia Huu (David) Nguyen (@DAVPFSN)
 '''
 
 EXAMPLES = r'''
@@ -83,17 +84,10 @@ sample:
 
 from ansible.module_utils.basic import AnsibleModule
 import json
-import asyncio
-import requests
-import aiohttp
-from requests.auth import HTTPBasicAuth
 
-
-async def async_api(api, username, auth_secret):
-    async with aiohttp.ClientSession(auth=aiohttp.BasicAuth(username, auth_secret)) as session:
-        async with session.get(api) as resp:
-            response = await resp.read()
-    return response
+# Import helper modules
+from ansible_collections.respiro.illumio.plugins.module_utils.credential import Credential
+from ansible_collections.respiro.illumio.plugins.module_utils.labels import get_labels
 
 
 def run_module():
@@ -111,27 +105,34 @@ def run_module():
         argument_spec=module_args,
         supports_check_mode=True
     )
-    API = module.params["pce"] + "/api/v2/orgs/" + module.params["org_id"] + "/labels"
+
+    username = module.params["username"]
+    auth_secret = module.params["auth_secret"]
+    pce = module.params["pce"]
+    org_href = "/orgs/" + module.params["org_id"]
+    input_type = module.params["type"]
+
+    # Initialize new credential
+    cred = Credential(username, auth_secret, pce, org_href)
+
     if module.check_mode:
         module.exit_json(**result)
     checksum = 0
     for label_type in TYPE:
-        if (module.params['type'] == label_type):
+        if (input_type == label_type):
             checksum = 1
             break
     if checksum == 0:
         module.fail_json(msg="Error!! Invalid label type.")
 
     try:
-        response = requests.get(API, auth=HTTPBasicAuth(module.params["username"], module.params["auth_secret"]))
-        if len(response.content) == 500:
-            response = async_api(API, module.params["username"], module.params["auth_secret"])
+        response = get_labels(cred)
         obj = json.loads(response.text)
         list = []
         for values in obj:
-            if values['key'] == module.params["type"]:
+            if values['key'] == input_type:
                 list.append(values)
-            elif module.params["type"] == 'all':
+            elif input_type == 'all':
                 list.append(values)
         module.exit_json(changed=True, success=list)
 
