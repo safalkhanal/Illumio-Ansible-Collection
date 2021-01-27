@@ -45,6 +45,7 @@ options:
 
 author:
     - Safal Khanal (@safalkhanal)
+    - Nghia Huu (David) Nguyen (@DAVPFSN)
 '''
 
 EXAMPLES = r'''
@@ -96,6 +97,7 @@ success:
             "app : new_app3"
         ],
 '''
+
 
 from ansible.module_utils.basic import AnsibleModule
 import json
