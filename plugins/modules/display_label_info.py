@@ -49,7 +49,7 @@ EXAMPLES = r'''
         type: "all"
         username: "api_12321323cf4545"
         auth_secret: "097jhdjksb9387384hjd3384bnfj93"
-        pce: "https://poc1.illum.io"
+        pce: "poc1.illum.io"
         org_id: "80"
 '''
 

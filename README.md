@@ -92,7 +92,7 @@ All modules are ran through **localhost**
       respiro.illumio.display_label_info:
         username: "api_12321323cf4545"
         auth_secret: "097jhdjksb9387384hjd3384bnfj93"
-        pce: "https://poc1.illum.io"
+        pce: "poc1.illum.io"
         org_id: "80"
         type: "all"
       register: data
@@ -119,7 +119,7 @@ All modules are ran through **localhost**
       respiro.illumio.create_label:
         username: "api_12321323cf4545"
         auth_secret: "097jhdjksb9387384hjd3384bnfj93"
-        pce: "https://poc1.illum.io"
+        pce: "poc1.illum.io"
         org_id: "80"
         path: "label.csv"
       register: data 
@@ -146,7 +146,7 @@ All modules are ran through **localhost**
       respiro.illumio.create_label:
         username: "api_12321323cf4545"
         auth_secret: "097jhdjksb9387384hjd3384bnfj93"
-        pce: "https://poc1.illum.io"
+        pce: "poc1.illum.io"
         org_id: "80"
         type: "loc"
         name: "new_location"
@@ -177,7 +177,7 @@ intructions below to create a managed workload
       respiro.illumio.create_umw:
         username: "api_12321323cf4545"
         auth_secret: "097jhdjksb9387384hjd3384bnfj93"
-        pce: "https://poc1.illum.io"
+        pce: "poc1.illum.io"
         org_id: "80"
         workload: "unmanaged_workload.csv"
       register: data 
@@ -278,7 +278,7 @@ The example below is for **Linux**, the code will need to be adapted to work for
   tasks:
   - name: add an umw to the pce
     respiro.illumio.create_umw:
-      pce: "https://poc1.illum.io"
+      pce: "poc1.illum.io"
       org_id: "86"
       username: "api_1e454dv85ev8d18b"
       auth_secret: "ff5df1ef552397878frfr8758r8tgf5d6e"
@@ -317,7 +317,7 @@ The example below is for **Linux**, the code will need to be adapted to work for
       respiro.illumio.assign_labels:
         username: "api_12321323cf4545"
         auth_secret: "097jhdjksb9387384hjd3384bnfj93"
-        pce: "https://poc1.illum.io"
+        pce: "poc1.illum.io"
         org_id: "80"
         workload: 'workload.csv'
       register: data
@@ -346,7 +346,7 @@ The example below is for **Linux**, the code will need to be adapted to work for
   tasks:
   - name: add an umw to the pce
     respiro.illumio.create_umw:
-      pce: "https://poc1.illum.io"
+      pce: "poc1.illum.io"
       org_id: "86"
       username: "api_1e454dv85ev8d18b"
       auth_secret: "ff5df1ef552397878frfr8758r8tgf5d6e"
@@ -365,7 +365,7 @@ The example below is for **Linux**, the code will need to be adapted to work for
     respiro.illumio.assign_labels:
       username: "api_12321323cf4545"
       auth_secret: "097jhdjksb9387384hjd3384bnfj93"
-      pce: "https://poc1.illum.io"
+      pce: "poc1.illum.io"
       org_id: "80"
       workload: 'workload.csv'
     register: data

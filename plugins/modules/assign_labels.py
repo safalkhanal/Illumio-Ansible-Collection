@@ -45,7 +45,7 @@ EXAMPLES = r'''
   respiro.illumio.assign_labels:
     username: "testusername"
     auth_secret: "testpassword"
-    pce: "https://poc1.illum.io"
+    pce: "poc1.illum.io"
     org_id: "85"
     workload: 'workload.csv'
 '''
