@@ -32,8 +32,9 @@ def sync_api(creds, http_verb, resource, has_org, payload=None):
     else:
         api_url = creds.url_with_api(resource)
 
-    # Declare headers and timeout
+    # Declare headers
     headers = {"Content-Type": "application/json", "Accept": "application/json"}
+    # Set connection timeout (avoid hanging, usually when user insert the wrong port number)
     timeout = 15
 
     # Make the call
@@ -57,9 +58,10 @@ def async_api(creds, resource, has_org, payload=None):
     else:
         api_url = creds.url_with_api(resource)
 
-    # Declare headers and timeout
+    # Declare headers
     # IMPORTANT: "Prefer": "respond-async" on header
     headers = {"Prefer": "respond-async", "Content-type": "application/json", "Accept": "application/json"}
+    # Set connection timeout (avoid hanging, usually when user insert the wrong port number)
     timeout = 15
 
     # Make the call

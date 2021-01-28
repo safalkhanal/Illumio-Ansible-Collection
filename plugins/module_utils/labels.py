@@ -3,7 +3,9 @@
 """
 Operations with labels:
 - Create labels
+- Get a particular label
 - Get labels
+- Update a label's value (name)
 - Create a dictionary that contains formatted labels' data
 """
 
@@ -27,6 +29,12 @@ def create_label(creds, type, name):
     return sync_api(creds, "post", "/labels", True, {"key": type, "value": name})
 
 
+# Get a particular label
+# Require the href of the label and credential
+def get_label(creds, label_href):
+    return sync_api(creds, "get", label_href, False)
+
+
 # Get all labels on PCE
 # Required a credential
 # Will also query for the number of results of data set
@@ -37,6 +45,12 @@ def get_labels(creds):
     if num_items_in_return_set >= 500:
         response = async_api(creds, "/labels", True)
     return response
+
+
+# Update label's name
+# Required credential, href of target label and new name
+def update_label(creds, label_href, payload):
+    return sync_api(creds, "put", label_href, False, payload)
 
 
 # This function will take a credential

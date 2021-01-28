@@ -118,6 +118,10 @@ import requests
 from requests.auth import HTTPBasicAuth
 from requests.exceptions import ConnectionError, Timeout
 
+# Import helper modules
+from ansible_collections.respiro.illumio.plugins.module_utils.credential import Credential
+from ansible_collections.respiro.illumio.plugins.module_utils.labels import get_label, update_label
+
 
 def run_module():
     # Define available arguments/parameters a user can pass to the module
@@ -145,26 +149,22 @@ def run_module():
     # Extract parameters from AnsibleModule object
     pce = module.params['pce']
     port = module.params['port']
-    org_id = module.params['org_id']
-    label_id = module.params['label_id']
+    org_href = "/orgs/" + module.params['org_id']
+    label_href = org_href + "/labels/" + module.params['label_id']
     username = module.params['username']
     auth_secret = module.params['auth_secret']
     new_value = module.params['new_value']
 
-    # Construct the request to the API
-    api_url = "https://" + pce + ":" + port + "/api/v2/orgs/" + org_id + "/labels/" + label_id
+    # Initialise new credential
+    cred = Credential(username, auth_secret, pce, org_href, port)
 
-    # Form headers and content
-    headers = {"Content-Type": "application/json", "Accept": "application/json"}
+    # Construct request payload
     data = {"value": new_value}
-    # Set connection timeout
-    # Avoid hanging when users insert a wrong port number
-    timeout = 15
 
     try:
 
         # Check to see if the label exists
-        response_get = requests.get(api_url, auth=HTTPBasicAuth(username, auth_secret), timeout=timeout)
+        response_get = get_label(cred, label_href)
 
         # If label exists
         # Check if the current value is the same as input value
@@ -182,8 +182,7 @@ def run_module():
                     module.exit_json(new="Change can be made to label's name"
                                          " from {} to {}".format(current_value, new_value))
                 # Make label update request to the API
-                response_put = requests.put(api_url, auth=HTTPBasicAuth(username, auth_secret), headers=headers,
-                                            data=json.dumps(data))
+                response_put = update_label(cred, label_href, data)
                 # If update is successful
                 if response_put.status_code == 204:
                     result['changed'] = True
