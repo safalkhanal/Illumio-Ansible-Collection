@@ -78,6 +78,11 @@ import aiohttp
 import asyncio
 from requests.auth import HTTPBasicAuth
 
+# Import helper modules
+from ansible_collections.respiro.illumio.plugins.module_utils.credential import Credential
+from ansible_collections.respiro.illumio.plugins.module_utils.labels import create_label, create_label_href_dict
+from ansible_collections.respiro.illumio.plugins.module_utils.workloads import get_workloads, update_workload
+
 
 def run_module():
     module_args = dict(
@@ -95,53 +100,18 @@ def run_module():
     workload = module.params['workload']
     username = module.params["username"]
     auth_secret = module.params["auth_secret"]
-    org_id = module.params["org_id"]
+    org_href = "/orgs/" + module.params["org_id"]
     pce = module.params["pce"]
-    API = pce + "/api/v2/orgs/" + org_id + "/workloads"
-    labels_API = pce + "/api/v2/orgs/" + org_id + "/labels"
-    list = {}
-    list['assigned'] = []
-    list['not_assigned'] = []
+    list = {'assigned': [], 'not_assigned': []}
+
+    # Initialize new credential
+    cred = Credential(username, auth_secret, pce, org_href)
 
     if module.check_mode:
         module.exit_json(**result)
 
-    # If the API data gets large(>500), async function is called
-    async def async_api(api):
-        async with aiohttp.ClientSession(auth=aiohttp.BasicAuth(username, auth_secret)) as session:
-            async with session.get(api) as resp:
-                response = await resp.read()
-        return response
-
-    # Function to get the list of labels from PCE
-    def display_labels():
-        response = requests.get(labels_API, auth=HTTPBasicAuth(username, auth_secret))
-        if len(response.content) == 500:
-            response = async_api(labels_API)
-        obj = json.loads(response.content)
-        labels = dict()
-        labels['role'] = dict()
-        labels['app'] = dict()
-        labels['env'] = dict()
-        labels['loc'] = dict()
-        for label_data in obj:
-            if label_data['key'] == "role":
-                labels['role'][label_data['value']] = label_data['href']
-            if label_data['key'] == "app":
-                labels['app'][label_data['value']] = label_data['href']
-            if label_data['key'] == "env":
-                labels['env'][label_data['value']] = label_data['href']
-            if label_data['key'] == "loc":
-                labels['loc'][label_data['value']] = label_data['href']
-        return labels
-
-    # Function to add labels to PCE
-    def create_label(type, name):
-        return requests.post(labels_API, auth=HTTPBasicAuth(username, auth_secret),
-                             data=json.dumps({"key": type, "value": name})).content
-
     # Main code: Checks csv file and compares labels in pce and labels in csv file, and assign labels to worloads
-    labels_details = display_labels()
+    labels_details = create_label_href_dict(cred)
     # getting data from the csv file and do the required operations
     with open(workload, 'r') as details:
         workload_details = csv.DictReader(details, delimiter=",")
@@ -153,15 +123,15 @@ def run_module():
             loc = rows['loc']
 
             # Get workloads from the PCE
-            response = requests.get(API, auth=HTTPBasicAuth(username, auth_secret))
-            obj = json.loads(response.text)
+            response = get_workloads(cred)
+            workloads_list = json.loads(response.text)
 
             # Check if label already exists in PCE. If not add to PCE and get its href.
             if role != "":
                 if role in labels_details['role']:
                     role_href = labels_details['role'][role]
                 else:
-                    href = json.loads(create_label("role", role))['href']
+                    href = json.loads(create_label(cred, "role", role).content)['href']
                     labels_details['role'][role] = href
                     role_href = href
             else:
@@ -170,7 +140,7 @@ def run_module():
                 if app in labels_details['app']:
                     app_href = labels_details['app'][app]
                 else:
-                    href = json.loads(create_label("app", app))['href']
+                    href = json.loads(create_label(cred, "app", app).content)['href']
                     labels_details['app'][app] = href
                     app_href = href
             else:
@@ -179,7 +149,7 @@ def run_module():
                 if env in labels_details['env']:
                     env_href = labels_details['env'][env]
                 else:
-                    href = json.loads(create_label("env", env))['href']
+                    href = json.loads(create_label(cred, "env", env).content)['href']
                     labels_details['env'][env] = href
                     env_href = href
             else:
@@ -188,7 +158,7 @@ def run_module():
                 if loc in labels_details['loc']:
                     loc_href = labels_details['loc'][loc]
                 else:
-                    href = json.loads(create_label("loc", loc))['href']
+                    href = json.loads(create_label(cred, "loc", loc).content)['href']
                     labels_details['loc'][loc] = href
                     loc_href = href
             else:
@@ -201,8 +171,8 @@ def run_module():
 
             # check the workload from PCE with workload from csv file and assign labels
             check = 0
-            for values in obj:
-                if values['hostname'] == hostname:
+            for workload in workloads_list:
+                if workload['hostname'] == hostname:
                     check = 1
                     label = []
                     if role_href:
@@ -213,9 +183,7 @@ def run_module():
                         label.append({"href": env_href})
                     if loc_href:
                         label.append({"href": loc_href})
-                    uri = pce + "/api/v2" + values['href']
-                    response = requests.put(uri, auth=HTTPBasicAuth(username, auth_secret),
-                                            data=json.dumps({'labels': label}))
+                    update_workload(cred, workload['href'], {'labels': label})
                     list['assigned'].append(hostname)
             if check == 0:
                 list['not_assigned'].append(hostname)
