@@ -4,6 +4,7 @@
 Operations with workloads:
 - Get workloads
 - Update a workload's details
+- Create unmanaged workload
 """
 
 __author__ = "Nghia Huu (David) Nguyen"
@@ -34,3 +35,32 @@ def get_workloads(creds):
 # And the payload containing the information that needs to be changed
 def update_workload(creds, workload_href, payload):
     return sync_api(creds, "put", workload_href, False, payload)
+
+
+# Create unmanaged workload
+# Required a credential, name (display on PCE)
+# A hostname, an IP
+# And a set of label associated with the machine
+def create_umw(creds, name, hostname, ip, label1=None, label2=None, label3=None, label4=None):
+    label = []
+    if label1:
+        label.append({"href": label1})
+    if label2:
+        label.append({"href": label2})
+    if label3:
+        label.append({"href": label3})
+    if label4:
+        label.append({"href": label4})
+    wl = {
+        "name": name,
+        "hostname": hostname,
+        "public_ip": ip,
+        "interfaces":
+            [{"name": "eth0",
+              "address": ip,
+              "cidr_block": 32,
+              "link_state": "up"}],
+        "online": True,
+        "labels": label
+    }
+    return sync_api(creds, "post", "/workloads", True, wl)
