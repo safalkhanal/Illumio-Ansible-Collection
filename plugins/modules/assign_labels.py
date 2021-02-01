@@ -6,7 +6,7 @@ DOCUMENTATION = r'''
 ---
 module: respiro.illumio.assign_labels
 
-short_description: This is the module to assign/edit labels to workloads from the csv file.
+short_description: This is the module to assign/edit workloads' labels from the csv file.
 
 version_added: "1.0.2"
 
@@ -68,15 +68,10 @@ original_message:
     }
 '''
 
-from ansible.module_utils.compat.paramiko import paramiko
 from ansible.module_utils.basic import AnsibleModule
 import time
 import csv
 import json
-import requests
-import aiohttp
-import asyncio
-from requests.auth import HTTPBasicAuth
 
 # Import helper modules
 from ansible_collections.respiro.illumio.plugins.module_utils.credential import Credential

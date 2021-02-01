@@ -31,7 +31,7 @@ options:
         required: true
         type: str
     workload:
-        description: This takes the path to csv file contatining workload information
+        description: This takes the path to csv file containing workload information
         required: true
         type: str
 

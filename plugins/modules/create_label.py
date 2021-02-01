@@ -4,7 +4,7 @@ __metaclass__ = type
 
 DOCUMENTATION = r'''
 ---
-module: respiro.illumio.create_labels
+module: respiro.illumio.create_label
 
 short_description: This module adds labels to PCE
 
@@ -100,10 +100,7 @@ success:
 
 
 from ansible.module_utils.basic import AnsibleModule
-import json
 import csv
-import requests
-from requests.auth import HTTPBasicAuth
 
 # Import helper modules
 from ansible_collections.respiro.illumio.plugins.module_utils.credential import Credential

@@ -114,8 +114,6 @@ success:
 
 from ansible.module_utils.basic import AnsibleModule
 import json
-import requests
-from requests.auth import HTTPBasicAuth
 from requests.exceptions import ConnectionError, Timeout
 
 # Import helper modules

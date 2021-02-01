@@ -8,10 +8,6 @@ To use the ansible modules, you have to install the following python modules.
 
 ```
 pip install requests
-pip install aiohttp
-pip install pypsexec
-pip install paramiko
-pip install asyncio
 ```
 This collections is packaged under ansible-galaxy, so to install it you need to run the following command:
 
@@ -99,7 +95,7 @@ All modules are ran through **localhost**
 
     - name: output data
       debug:
-         msg: '{{ data }}'
+        msg: '{{ data }}'
 ```
 
 <br>
@@ -126,7 +122,7 @@ All modules are ran through **localhost**
 
     - name: output data
       debug:
-         msg: '{{ data }}'
+        msg: '{{ data }}'
 ```
 
 <br>
@@ -247,14 +243,14 @@ The example below is for **Linux**, the code will need to be adapted to work for
 - name: setup managed workload
   hosts: test_server
   tasks:
-  - name: install VEN on linux machine
-    become: true
-    script: "linux_script.sh"
-    register: test_output
+    - name: install VEN on linux machine
+      become: true
+      script: "linux_script.sh"
+      register: test_output
 
-  - name: dump test output
-    debug:
-      msg: '{{ test_output }}'
+    - name: dump test output
+      debug:
+        msg: '{{ test_output }}'
 ```
 
 <br>
@@ -276,28 +272,28 @@ The example below is for **Linux**, the code will need to be adapted to work for
 - name: adding workloads
   hosts: test_server
   tasks:
-  - name: add an umw to the pce
-    respiro.illumio.create_umw:
-      pce: "poc1.illum.io"
-      org_id: "86"
-      username: "api_1e454dv85ev8d18b"
-      auth_secret: "ff5df1ef552397878frfr8758r8tgf5d6e"
-      workload: "test_addingUMW.csv"
-    delegate_to: localhost
-    register: test_output
+    - name: add an umw to the pce
+      respiro.illumio.create_umw:
+        pce: "poc1.illum.io"
+        org_id: "86"
+        username: "api_1e454dv85ev8d18b"
+        auth_secret: "ff5df1ef552397878frfr8758r8tgf5d6e"
+        workload: "test_addingUMW.csv"
+      delegate_to: localhost
+      register: test_output
 
-  - name: dump test output
-    debug:
-      msg: '{{ test_output }}'
+    - name: dump test output
+      debug:
+        msg: '{{ test_output }}'
 
-  - name: install VEN on linux machine
-    become: true
-    script: "linux_script.sh"
-    register: test_output
+    - name: install VEN on linux machine
+      become: true
+      script: "linux_script.sh"
+      register: test_output
 
-  - name: dump test output
-    debug:
-      msg: '{{ test_output }}'
+    - name: dump test output
+      debug:
+        msg: '{{ test_output }}'
 ```
 
 <br>
@@ -344,35 +340,35 @@ The example below is for **Linux**, the code will need to be adapted to work for
 - name: adding workloads and assigning labels
   hosts: localhost
   tasks:
-  - name: add an umw to the pce
-    respiro.illumio.create_umw:
-      pce: "poc1.illum.io"
-      org_id: "86"
-      username: "api_1e454dv85ev8d18b"
-      auth_secret: "ff5df1ef552397878frfr8758r8tgf5d6e"
-      workload: "test_addingUMW.csv"
-    register: test_output
+    - name: add an umw to the pce
+      respiro.illumio.create_umw:
+        pce: "poc1.illum.io"
+        org_id: "86"
+        username: "api_1e454dv85ev8d18b"
+        auth_secret: "ff5df1ef552397878frfr8758r8tgf5d6e"
+        workload: "test_addingUMW.csv"
+      register: test_output
 
-  - name: dump test output
-    debug:
-      msg: '{{ test_output }}'
+    - name: dump test output
+      debug:
+        msg: '{{ test_output }}'
 
-  - name: Pause to allow time for the PCE to update new information
-    pause:
-      seconds: 15
+    - name: Pause to allow time for the PCE to update new information
+      pause:
+        seconds: 15
 
-  - name: Assign labels to workloads
-    respiro.illumio.assign_labels:
-      username: "api_12321323cf4545"
-      auth_secret: "097jhdjksb9387384hjd3384bnfj93"
-      pce: "poc1.illum.io"
-      org_id: "80"
-      workload: 'workload.csv'
-    register: data
+    - name: Assign labels to workloads
+      respiro.illumio.assign_labels:
+        username: "api_12321323cf4545"
+        auth_secret: "097jhdjksb9387384hjd3384bnfj93"
+        pce: "poc1.illum.io"
+        org_id: "80"
+        workload: 'workload.csv'
+      register: data
 
-  - name: output data
-    debug:
-      msg: '{{ data }}'
+    - name: output data
+      debug:
+        msg: '{{ data }}'
 ```
 
 <br>
@@ -388,20 +384,20 @@ The example below is for **Linux**, the code will need to be adapted to work for
 - name: Update a label
   hosts: localhost
   tasks:
-  - name: update label
-    respiro.illumio.update_label:
-      pce: "poc1.illum.io"
-      port: "8443"
-      org_id: "80"
-      label_id: "439151"
-      username: "api_15df8c15v1d8"
-      auth_secret: "54gf845v48rwe8wc548v8hr85d9abbe86a6555f8v8w8m85yh8yyy8h"
-      new_value: "testing_0"
-    register: test_output
-    
-  - name: dump test output
-    debug:
-      msg: '{{ test_output }}'
+    - name: update label
+      respiro.illumio.update_label:
+        pce: "poc1.illum.io"
+        port: "8443"
+        org_id: "80"
+        label_id: "439151"
+        username: "api_15df8c15v1d8"
+        auth_secret: "54gf845v48rwe8wc548v8hr85d9abbe86a6555f8v8w8m85yh8yyy8h"
+        new_value: "testing_0"
+      register: test_output
+      
+    - name: dump test output
+      debug:
+        msg: '{{ test_output }}'
 ```
 
 
