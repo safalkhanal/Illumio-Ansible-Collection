@@ -4,7 +4,7 @@ __metaclass__ = type
 
 DOCUMENTATION = r'''
 ---
-module: respiro.illumio.create_labels
+module: respiro.illumio.create_label
 
 short_description: This module adds labels to PCE
 
@@ -38,13 +38,14 @@ options:
         description: This takes the url link to Illumio PCE
         required: true
         type: str
-    org-href:
-        description: This takes the organisation href for Illumio PCE
+    org-id:
+        description: This takes the organisation ID for Illumio PCE
         required: true
         type: str
 
 author:
     - Safal Khanal (@safalkhanal)
+    - Nghia Huu (David) Nguyen (@DAVPFSN)
 '''
 
 EXAMPLES = r'''
@@ -66,7 +67,7 @@ EXAMPLES = r'''
     org_id: "80"
     name: "test_application"
     type: "app"
-    
+
 # fail the module
 - name: Test failure of the module
   respiro.illumio.create_label:
@@ -99,10 +100,11 @@ success:
 
 
 from ansible.module_utils.basic import AnsibleModule
-import json
 import csv
-import requests
-from requests.auth import HTTPBasicAuth
+
+# Import helper modules
+from ansible_collections.respiro.illumio.plugins.module_utils.credential import Credential
+from ansible_collections.respiro.illumio.plugins.module_utils.labels import create_label
 
 
 def run_module():
@@ -126,9 +128,11 @@ def run_module():
     l_path = module.params['path']
     login = module.params["username"]
     auth_secret = module.params["auth_secret"]
-    org_href = module.params["org_id"]
+    org_href = "/orgs/" + module.params["org_id"]
     pce = module.params["pce"]
-    API = pce + "/api/v2/" + org_href + "/labels"
+
+    # Initialize new credential
+    cred = Credential(login, auth_secret, pce, org_href)
 
     if module.check_mode:
         module.exit_json(**result)
@@ -141,7 +145,7 @@ def run_module():
                     key = rows["type"]
                     value = rows["name"]
                     if key == 'loc' or key == 'env' or key == 'role' or key == 'app':
-                        response = requests.post(API, auth=HTTPBasicAuth(login, auth_secret), data=json.dumps({"key": key, "value": value}))
+                        response = create_label(cred, key, value)
                         list["success"].append(key + " : " + value)
                     else:
                         list["error"].append("Invalid type:" + key + ". Type should be either env,app,loc,role")
@@ -149,7 +153,7 @@ def run_module():
             if l_type == 'env' or l_type == 'loc' or l_type == 'app' or l_type == 'role':
                 y = {"key": l_type, "value": l_name}
                 list["success"].append(l_type + " : " + l_name)
-                response = requests.post(API, auth=HTTPBasicAuth(login, auth_secret), data=json.dumps({"key": l_type, "value": l_name}))
+                response = create_label(cred, l_type, l_name)
             else:
                 module.exit_json(msg="Invalid type value.", failed=l_type)
         else:
